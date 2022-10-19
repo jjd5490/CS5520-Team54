@@ -2,4 +2,5 @@
     <string name="app_name">Team54</string>
     <string name="team_54">Team 54</string>
     <string name="web_service">Web Service</string>
+    <string name="url">URL</string>
 </resources>
