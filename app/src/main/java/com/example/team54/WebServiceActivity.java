@@ -22,7 +22,6 @@ public class WebServiceActivity extends AppCompatActivity {
     private Retrofit retrofit;
     private Button testCall;
     private EndpointHelper api;
-    //private final String apiBaseURL = "https://jsonplaceholder.typicode.com/";
     private final String apiBaseURL = "https://www.balldontlie.io/api/v1/";
 
 
@@ -36,8 +35,7 @@ public class WebServiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "call button clicked");
-                getPosts();
-                //getGames();
+                getGames();
             }
         });
 
@@ -49,50 +47,25 @@ public class WebServiceActivity extends AppCompatActivity {
         api = retrofit.create(EndpointHelper.class);
     }
 
-    private void getPosts() {
-        Call<List<PostModel>> call = api.getPostModels();
-        call.enqueue(new Callback<List<PostModel>>() {
-            @Override
-            public void onResponse(Call<List<PostModel>> call, Response<List<PostModel>> response) {
-                if(!response.isSuccessful()) {
-                    Log.d(TAG, "Call failed!" + response.code());
-                    return;
-                }
-                List<PostModel> postModels = response.body();
-                for(PostModel post : postModels) {
-                    StringBuffer str = new StringBuffer();
-                    str.append(post.getId());
-                    Log.d(TAG, str.toString());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<PostModel>> call, Throwable t) {
-                Log.d(TAG, "Call failed" + t.getMessage());
-            }
-        });
-    }
-
-    /**
     private void getGames() {
-        Call<List<GameModel>> call = api.getGameModels();
-        call.enqueue(new Callback<List<GameModel>>() {
+        Call<GameResponseModel> call = api.getGameModels();
+        call.enqueue(new Callback<GameResponseModel>() {
             @Override
-            public void onResponse(Call<List<GameModel>> call, Response<List<GameModel>> response) {
-                List<GameModel> gameModels = response.body();
-                for(GameModel game : gameModels) {
+            public void onResponse(Call<GameResponseModel> call, Response<GameResponseModel> response) {
+                List<GameModel> gameList = response.body().getGameList();
+                for(GameModel game : gameList) {
                     StringBuffer str = new StringBuffer();
-                    str.append(game.getHome_team());
-                    str.append(game.getVisitor_score());
+                    str.append("id: " + game.getId());
+                    str.append(" home: " + game.getHome_team().getName());
+                    str.append(" visitor: " + game.getVisitor_team().getName());
                     Log.d(TAG, str.toString());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<GameModel>> call, Throwable t) {
+            public void onFailure(Call<GameResponseModel> call, Throwable t) {
                 Log.d(TAG, "Call failed: " + t.getMessage());
             }
         });
     }
-     **/
 }

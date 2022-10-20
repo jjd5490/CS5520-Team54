@@ -3,19 +3,27 @@ package com.example.team54;
 import com.google.gson.annotations.SerializedName;
 
 public class GameModel {
+    @SerializedName("id")
+    private Integer id;
+    @SerializedName("date")
+    private String date;
     @SerializedName("home_team_score")
     private Integer home_score;
 
     @SerializedName("visitor_team_score")
     private Integer visitor_score;
-    private String home_team;
-    private String visitor_team;
+    private TeamModel home_team;
+    private TeamModel visitor_team;
     private boolean postseason;
     private Integer season;
+
+
     private String status;
 
-    public GameModel(Integer home_score, Integer visitor_score, String home_team, String visitor_team,
-                     boolean postseason, Integer season, String status) {
+    public GameModel(Integer id, String date, Integer home_score, Integer visitor_score, TeamModel home_team,
+                     TeamModel visitor_team, boolean postseason, Integer season, String status) {
+        this.id = id;
+        this.date = date;
         this.home_score = home_score;
         this.visitor_score = visitor_score;
         this.home_team = home_team;
@@ -23,6 +31,14 @@ public class GameModel {
         this.postseason = postseason;
         this.season = season;
         this.status = status;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public Integer getHome_score() {
@@ -33,11 +49,13 @@ public class GameModel {
         return visitor_score;
     }
 
-    public String getHome_team() {
+
+    public TeamModel getHome_team() {
         return home_team;
     }
 
-    public String getVisitor_team() {
+
+    public TeamModel getVisitor_team() {
         return visitor_team;
     }
 

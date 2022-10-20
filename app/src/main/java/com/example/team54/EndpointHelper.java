@@ -14,9 +14,6 @@ import retrofit2.http.Query;
 
 public interface EndpointHelper {
 
-    @GET("posts")
-    Call<List<PostModel>> getPostModels();
-
-    @GET("games")
-    Call<List<GameModel>> getGameModels();
+    @GET("games?per_page=100")
+    Call<GameResponseModel> getGameModels();
 }
