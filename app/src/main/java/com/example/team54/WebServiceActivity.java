@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class WebServiceActivity extends AppCompatActivity {
     private Button testCall;
     private EndpointHelper api;
     private final String apiBaseURL = "https://www.balldontlie.io/api/v1/";
+    private RecyclerView gameListRecyclerView;
 
 
     @Override
@@ -59,6 +62,9 @@ public class WebServiceActivity extends AppCompatActivity {
                     str.append(" home: " + game.getHome_team().getName());
                     str.append(" visitor: " + game.getVisitor_team().getName());
                     Log.d(TAG, str.toString());
+                    gameListRecyclerView = findViewById(R.id.recyclerView);
+                    gameListRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                    gameListRecyclerView.setAdapter(new TeamModelAdapter(gameList, getApplicationContext()));
                 }
             }
 
@@ -68,4 +74,6 @@ public class WebServiceActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

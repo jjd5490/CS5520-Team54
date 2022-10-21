@@ -4,4 +4,9 @@
     <string name="web_service">Web Service</string>
     <string name="url">URL</string>
     <string name="test_call">Test Call</string>
+    <string name="team_id">Id</string>
+    <string name="team_name">Name</string>
+    <string name="team_city">City</string>
+    <string name="team_division">Division</string>
+    <string name="team_conference">Conference</string>
 </resources>
