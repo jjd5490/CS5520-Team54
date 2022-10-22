@@ -1,7 +1,10 @@
 package com.example.team54;
 
+import static java.lang.Integer.parseInt;
+
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -70,8 +73,6 @@ public class WebServiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 loadAnimation.setVisibility(View.VISIBLE);
-                //Log.d(TAG,"Team id: " + teamID);
-                //Log.d(TAG, "Season: " + selectedSeason);
                 getGames();
             }
         });
@@ -82,6 +83,27 @@ public class WebServiceActivity extends AppCompatActivity {
                 .build();
 
         api = retrofit.create(EndpointHelper.class);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        TeamNames team = (TeamNames) teamDropDown.getSelectedItem();
+        int teamID = team.ordinal() + 1;
+        String seasonID = seasonDropDown.getSelectedItem().toString();
+        outState.putInt("team", teamID);
+        outState.putString("season", seasonID);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        int teamId = savedInstanceState.getInt("team");
+        int seasonId = parseInt(savedInstanceState.getString("season"));
+        int seasonIndex = (2021 - seasonId);
+        teamDropDown.setSelection(teamId - 1);
+        seasonDropDown.setSelection(seasonIndex);
+
     }
 
 
@@ -110,13 +132,9 @@ public class WebServiceActivity extends AppCompatActivity {
             public void onResponse(Call<GameResponseModel> call, Response<GameResponseModel> response) {
                 List<GameModel> gameList = response.body().getGameList();
                 Log.d(TAG, "Total games = " + gameList.size());
-                for(GameModel game : gameList) {
-                    StringBuffer str = new StringBuffer();
-                    str.append("id: " + game.getId());
-                    str.append(" home: " + game.getHome_team().getName());
-                    str.append(" visitor: " + game.getVisitor_team().getName());
-                }
-                gameAdapter.setGameList(gameList);
+
+                Games = gameList;
+                gameAdapter.setGameList(Games);
                 loadAnimation.setVisibility(View.INVISIBLE);
             }
 
