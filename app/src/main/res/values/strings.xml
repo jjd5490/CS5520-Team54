@@ -5,8 +5,10 @@
     <string name="url">URL</string>
     <string name="test_call">Test Call</string>
     <string name="team_id">Id</string>
-    <string name="team_name">Name</string>
-    <string name="team_city">City</string>
-    <string name="team_division">Division</string>
-    <string name="team_conference">Conference</string>
+    <string name="homeTeamScore">Home S</string>
+    <string name="awayTeamScore">Away S</string>
+    <string name="home_city">Home City</string>
+    <string name="away_city">Away City</string>
+
+    <string name="team_logo_unavailable_picture">Team logo unavailable picture</string>
 </resources>
