@@ -1,0 +1,35 @@
+package com.example.team54;
+
+public enum TeamNames {
+    Hawks,
+    Celtics,
+    Nets,
+    Hornets,
+    Bulls,
+    Cavaliers,
+    Mavericks,
+    Nuggets,
+    Pistons,
+    Warriors,
+    Rockets,
+    Pacers,
+    Clippers,
+    Lakers,
+    Grizzlies,
+    Heat,
+    Bucks,
+    Timberwolves,
+    Pelicans,
+    Knicks,
+    Thunder,
+    Magic,
+    SeventySixers,
+    Suns,
+    Trailblazers,
+    Kings,
+    Spurs,
+    Raptors,
+    Jazz,
+    Wizards
+
+}

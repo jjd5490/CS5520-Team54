@@ -4,7 +4,9 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +28,7 @@ public class WebServiceActivity extends AppCompatActivity {
     private EndpointHelper api;
     private final String apiBaseURL = "https://www.balldontlie.io/api/v1/";
     private RecyclerView gameListRecyclerView;
+    Spinner teamDropDown;
 
 
     @Override
@@ -33,11 +36,19 @@ public class WebServiceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_service);
 
+        teamDropDown = findViewById(R.id.spinner);
+        //String[] teamList = new String[]{"Celtics", "Heat", "Spurs"};
+        TeamNames[] teamList = TeamNames.values();
+        ArrayAdapter<TeamNames> adapter = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, teamList);
+        teamDropDown.setAdapter(adapter);
+
         testCall = findViewById(R.id.test_call);
         testCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "call button clicked");
+                TeamNames selected = (TeamNames) teamDropDown.getSelectedItem();
+                Log.d(TAG, "Selected Team is: " + (selected.ordinal() + 1));
                 getGames();
             }
         });
