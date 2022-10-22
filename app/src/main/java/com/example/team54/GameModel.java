@@ -1,8 +1,11 @@
 package com.example.team54;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-public class GameModel {
+public class GameModel implements Parcelable {
     @SerializedName("id")
     private Integer id;
     @SerializedName("date")
@@ -32,6 +35,84 @@ public class GameModel {
         this.season = season;
         this.status = status;
     }
+
+    protected GameModel(Parcel in) {
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+        date = in.readString();
+        if (in.readByte() == 0) {
+            home_score = null;
+        } else {
+            home_score = in.readInt();
+        }
+        if (in.readByte() == 0) {
+            visitor_score = null;
+        } else {
+            visitor_score = in.readInt();
+        }
+        home_team = in.readParcelable(TeamModel.class.getClassLoader());
+        visitor_team = in.readParcelable(TeamModel.class.getClassLoader());
+        postseason = in.readByte() != 0;
+        if (in.readByte() == 0) {
+            season = null;
+        } else {
+            season = in.readInt();
+        }
+        status = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (id == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(id);
+        }
+        dest.writeString(date);
+        if (home_score == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(home_score);
+        }
+        if (visitor_score == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(visitor_score);
+        }
+        dest.writeParcelable(home_team, flags);
+        dest.writeParcelable(visitor_team, flags);
+        dest.writeByte((byte) (postseason ? 1 : 0));
+        if (season == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(season);
+        }
+        dest.writeString(status);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<GameModel> CREATOR = new Creator<GameModel>() {
+        @Override
+        public GameModel createFromParcel(Parcel in) {
+            return new GameModel(in);
+        }
+
+        @Override
+        public GameModel[] newArray(int size) {
+            return new GameModel[size];
+        }
+    };
 
     public Integer getId() {
         return id;

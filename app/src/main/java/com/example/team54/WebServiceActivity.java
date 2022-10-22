@@ -93,6 +93,11 @@ public class WebServiceActivity extends AppCompatActivity {
         String seasonID = seasonDropDown.getSelectedItem().toString();
         outState.putInt("team", teamID);
         outState.putString("season", seasonID);
+        GameModel[] gameOut = GameModel.CREATOR.newArray(Games.size());
+        for (int i = 0; i < Games.size(); i++) {
+            gameOut[i] = Games.get(i);
+        }
+        outState.putParcelableArray("games", gameOut);
     }
 
     @Override
@@ -101,8 +106,15 @@ public class WebServiceActivity extends AppCompatActivity {
         int teamId = savedInstanceState.getInt("team");
         int seasonId = parseInt(savedInstanceState.getString("season"));
         int seasonIndex = (2021 - seasonId);
+        Parcelable[] parcelableIn = savedInstanceState.getParcelableArray("games");
+        List<GameModel> gamesIn = new ArrayList<>();
+        for (Parcelable game : parcelableIn) {
+            gamesIn.add( (GameModel) game);
+        }
         teamDropDown.setSelection(teamId - 1);
         seasonDropDown.setSelection(seasonIndex);
+        Games = gamesIn;
+        gameAdapter.setGameList(Games);
 
     }
 
