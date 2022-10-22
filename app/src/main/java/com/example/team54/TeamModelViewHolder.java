@@ -1,6 +1,7 @@
 package com.example.team54;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -8,18 +9,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class TeamModelViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView name;
-    public TextView id;
-    public TextView city;
-    public TextView division;
-    public TextView conference;
+    public TextView homeScore, awayScore, homeCity, awayCity, conference;
+    public ImageView logoHome, logoAway;
 
     public TeamModelViewHolder(@NonNull View itemView) {
         super(itemView);
-        this.name = itemView.findViewById(R.id.team_name);
-        this.id = itemView.findViewById(R.id.team_id);
-        this.city = itemView.findViewById(R.id.team_city);
-        this.division = itemView.findViewById(R.id.team_division);
-        this.conference = itemView.findViewById(R.id.team_conference);
+        this.homeScore = itemView.findViewById(R.id.homeTeamScore);
+        this.awayScore = itemView.findViewById(R.id.awayTeamScore);
+        this.homeCity = itemView.findViewById(R.id.home_city);
+        this.awayCity = itemView.findViewById(R.id.away_city);
+        this.logoHome = itemView.findViewById(R.id.logoHome);
+        this.logoAway = itemView.findViewById(R.id.logoAway);
     }
 }

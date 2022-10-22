@@ -14,6 +14,7 @@ public class TeamModelAdapter extends RecyclerView.Adapter<TeamModelViewHolder>{
     private List<GameModel> gameList;
     private final Context context;
 
+
     public TeamModelAdapter(List<GameModel> gameList, Context context){
         this.gameList = gameList;
         this.context = context;
@@ -32,19 +33,16 @@ public class TeamModelAdapter extends RecyclerView.Adapter<TeamModelViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull TeamModelViewHolder holder, int position) {
-        holder.name.setText(gameList.get(position).getHome_team().getName());
-        holder.city.setText(gameList.get(position).getHome_team().getCity());
-        holder.id.setText(String.valueOf(gameList.get(position).getHome_team().getTeam_id()));
-        holder.conference.setText(gameList.get(position).getHome_team().getConference());
-        holder.division.setText(gameList.get(position).getHome_team().getDivision());
 
-//        holder.score.setText(gameList.get(position).getHome_team().getCity());
+        holder.homeScore.setText(String.valueOf(gameList.get(position).getHome_score()));
+        holder.homeCity.setText(gameList.get(position).getHome_team().getName());
+        holder.awayScore.setText(String.valueOf(gameList.get(position).getVisitor_score()));
+        holder.awayCity.setText(gameList.get(position).getVisitor_team().getName());
+//        holder.logoHome.setImageResource(); setImageDrawable(getResources().getDrawable);
+        holder.logoAway.setImageResource(R.drawable.team19);
+        holder.logoHome.setImageResource(R.drawable.team25);
 
 
-//        holder.id.setText(String.valueOf(gameList.get(position).getSeason()));
-//        holder.name.setText(String.valueOf(gameList.get(position).getId()));
-//        holder.score.setText(gameList.get(position).getHome_team().getName());
-        //holder.score.setText("TEAM");
     }
 
     @Override
