@@ -2,6 +2,7 @@ package com.example.team54;
 
 import static java.lang.Integer.parseInt;
 
+import android.content.Context;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -13,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,6 +40,7 @@ public class WebServiceActivity extends AppCompatActivity {
     private Spinner teamDropDown;
     private Spinner seasonDropDown;
     private RadioGroup gameTypeSelection;
+    private Context context = this;
     List<GameModel> Games = new ArrayList<>();
     TeamModelAdapter gameAdapter;
     List<Integer> SEASONS;
@@ -72,6 +75,7 @@ public class WebServiceActivity extends AppCompatActivity {
         testCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                testCall.setClickable(false);
                 loadAnimation.setVisibility(View.VISIBLE);
                 getGames();
             }
@@ -142,12 +146,21 @@ public class WebServiceActivity extends AppCompatActivity {
         call.enqueue(new Callback<GameResponseModel>() {
             @Override
             public void onResponse(Call<GameResponseModel> call, Response<GameResponseModel> response) {
-                List<GameModel> gameList = response.body().getGameList();
-                Log.d(TAG, "Total games = " + gameList.size());
 
-                Games = gameList;
-                gameAdapter.setGameList(Games);
+                if (response.code() == 200) {
+                    Log.d(TAG, "Response code is: " + response.code());
+                    List<GameModel> gameList = response.body().getGameList();
+                    Games = gameList;
+                    gameAdapter.setGameList(Games);
+                }
                 loadAnimation.setVisibility(View.INVISIBLE);
+                testCall.setClickable(true);
+                if (response.code() == 429) {
+                    Toast.makeText(context, "Rate Limit Exceded. Wait 60 sec.", Toast.LENGTH_LONG).show();
+                }
+                if (response.code() == 500 || response.code() == 503) {
+                    Toast.makeText(context, "Server Unavailable. Try later", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
