@@ -14,6 +14,14 @@ import retrofit2.http.Query;
 
 public interface EndpointHelper {
 
-    @GET("games?per_page=100")
-    Call<GameResponseModel> getGameModels();
+    @GET("games")
+    Call<GameResponseModel> getAllSeasonGames(@Query("team_ids[]") int id,
+                                              @Query("seasons[]") int year,
+                                              @Query("per_page") int count);
+
+    @GET("games")
+    Call<GameResponseModel> getGamesPostFilter(@Query("team_ids[]") int id,
+                                               @Query("seasons[]") int year,
+                                               @Query("postseason") boolean post,
+                                               @Query("per_page") int count);
 }
