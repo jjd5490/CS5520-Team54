@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -37,6 +38,7 @@ public class WebServiceActivity extends AppCompatActivity {
     List<GameModel> Games = new ArrayList<>();
     TeamModelAdapter gameAdapter;
     List<Integer> SEASONS;
+    ProgressBar loadAnimation;
 
 
     @Override
@@ -53,6 +55,7 @@ public class WebServiceActivity extends AppCompatActivity {
         teamDropDown = findViewById(R.id.spinner);
         seasonDropDown = findViewById(R.id.season_dropdown);
         gameTypeSelection = findViewById(R.id.postseason_selection);
+        loadAnimation = findViewById(R.id.loading);
         gameTypeSelection.check(R.id.all_games);
 
         TeamNames[] teamList = TeamNames.values();
@@ -66,7 +69,7 @@ public class WebServiceActivity extends AppCompatActivity {
         testCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                loadAnimation.setVisibility(View.VISIBLE);
                 //Log.d(TAG,"Team id: " + teamID);
                 //Log.d(TAG, "Season: " + selectedSeason);
                 getGames();
@@ -83,6 +86,7 @@ public class WebServiceActivity extends AppCompatActivity {
 
 
     private void getGames() {
+        gameAdapter.setGameList(new ArrayList<>());
         TeamNames selectedTeam = (TeamNames) teamDropDown.getSelectedItem();
         int teamID = (selectedTeam.ordinal() + 1);
         int selectedSeason = (int) seasonDropDown.getSelectedItem();
@@ -113,6 +117,7 @@ public class WebServiceActivity extends AppCompatActivity {
                     str.append(" visitor: " + game.getVisitor_team().getName());
                 }
                 gameAdapter.setGameList(gameList);
+                loadAnimation.setVisibility(View.INVISIBLE);
             }
 
             @Override
