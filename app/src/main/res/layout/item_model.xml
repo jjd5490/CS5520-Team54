@@ -5,93 +5,105 @@
     android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_margin="5dp"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:cardBackgroundColor="#F2F2F2"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="3dp"
-    app:contentPadding="2dp">
+    app:cardBackgroundColor="#FFFFFF">
 
     <androidx.constraintlayout.widget.ConstraintLayout
 
         android:id="@+id/constraintLayout"
-        android:layout_width="392dp"
-        android:layout_height="123dp"
+        android:layout_width="wrap_content"
+        android:layout_height="125dp"
         android:padding="12dp"
         tools:layout_editor_absoluteX="2dp"
         tools:layout_editor_absoluteY="2dp">
 
         <TextView
             android:id="@+id/homeTeamScore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_width="104dp"
+            android:layout_height="36dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/homeTeamScore"
             android:textSize="28sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/awayTeamScore"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/logoHome"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/home_city"
-            android:layout_width="113dp"
+            android:layout_width="103dp"
             android:layout_height="28dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
             android:text="@string/home_city"
-            android:textSize="18sp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/logoHome"
-            app:layout_constraintTop_toBottomOf="@+id/homeTeamScore" />
+            app:layout_constraintTop_toBottomOf="@+id/homeTeamScore"
+            app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
             android:id="@+id/logoHome"
             android:layout_width="53dp"
             android:layout_height="74dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:contentDescription="@string/team_logo_unavailable_picture"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/team7" />
+            app:srcCompat="@drawable/imageunavailable"
+            tools:ignore="ImageContrastCheck" />
 
         <TextView
             android:id="@+id/away_city"
-            android:layout_width="118dp"
-            android:layout_height="28dp"
+            android:layout_width="117dp"
+            android:layout_height="27dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:gravity="right"
+            android:layout_marginBottom="16dp"
+            android:gravity="end"
             android:text="@string/away_city"
-            android:textSize="18sp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/logoAway"
-            app:layout_constraintTop_toBottomOf="@+id/awayTeamScore" />
+            app:layout_constraintTop_toBottomOf="@+id/awayTeamScore"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/awayTeamScore"
             android:layout_width="107dp"
             android:layout_height="38dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:gravity="right"
+            android:layout_marginEnd="16dp"
+            android:gravity="end"
             android:text="@string/awayTeamScore"
             android:textSize="28sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/logoAway"
+            app:layout_constraintStart_toEndOf="@+id/homeTeamScore"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/logoAway"
             android:layout_width="53dp"
             android:layout_height="74dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:contentDescription="@string/team_logo_unavailable_picture"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/team7" />
+            app:srcCompat="@drawable/imageunavailable"
+            tools:ignore="ImageContrastCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

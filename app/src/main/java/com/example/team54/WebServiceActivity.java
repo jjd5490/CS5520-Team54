@@ -156,7 +156,7 @@ public class WebServiceActivity extends AppCompatActivity {
                 loadAnimation.setVisibility(View.INVISIBLE);
                 testCall.setClickable(true);
                 if (response.code() == 429) {
-                    Toast.makeText(context, "Rate Limit Exceded. Wait 60 sec.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Rate Limit Exceeded. Wait 60 sec.", Toast.LENGTH_LONG).show();
                 }
                 if (response.code() == 500 || response.code() == 503) {
                     Toast.makeText(context, "Server Unavailable. Try later", Toast.LENGTH_LONG).show();

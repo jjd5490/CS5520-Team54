@@ -1,5 +1,6 @@
 package com.example.team54;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class TeamModelViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView homeScore, awayScore, homeCity, awayCity, conference;
+    public TextView homeScore, awayScore, homeCity, awayCity;
     public ImageView logoHome, logoAway;
 
     public TeamModelViewHolder(@NonNull View itemView) {
