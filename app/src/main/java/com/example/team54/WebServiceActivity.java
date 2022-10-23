@@ -152,6 +152,9 @@ public class WebServiceActivity extends AppCompatActivity {
                     List<GameModel> gameList = response.body().getGameList();
                     Games = gameList;
                     gameAdapter.setGameList(Games);
+                    if (Games.size() == 0) {
+                        Toast.makeText(context, "No results matching search criteria", Toast.LENGTH_LONG).show();
+                    }
                 }
                 loadAnimation.setVisibility(View.INVISIBLE);
                 testCall.setClickable(true);
