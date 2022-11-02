@@ -3,6 +3,7 @@ package com.example.team54;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
 
 public class LoginTest extends AppCompatActivity {
@@ -22,6 +24,7 @@ public class LoginTest extends AppCompatActivity {
     private TextView loginUsername;
     private final String DEFAULT_PASSWORD = "default";
     private final String TAG = "Login Activity: ";
+    private String UID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +35,9 @@ public class LoginTest extends AppCompatActivity {
         loginUsername = findViewById(R.id.login_username);
     }
 
-    public void onSignUpSubmit(View view) {
-        String username = signUpUsername.getText().toString();
-        auth.createUserWithEmailAndPassword(username, DEFAULT_PASSWORD)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "Sign up successful");
-                        } else {
-                            Log.d(TAG, "Sign up failed");
-                        }
-                    }
-                });
+    public void openSignUp(View view) {
+        Intent openSignUpActivity = new Intent(this.getApplicationContext(), SignUpActivity.class);
+        startActivity(openSignUpActivity);
     }
 
     public void signIn(View view) {
@@ -56,6 +49,15 @@ public class LoginTest extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "sign in successful");
                             FirebaseUser user = auth.getCurrentUser();
+                            if (user != null) {
+                                UID = user.getUid();
+                            }
+                            Bundle userData = new Bundle();
+                            userData.putString("UID", UID);
+                            Intent stickerIntent = new Intent(getApplicationContext(), StickerActivity.class);
+                            stickerIntent.putExtras(userData);
+                            startActivity(stickerIntent);
+
                         } else {
                             Log.d(TAG, "sign in failed");
                         }

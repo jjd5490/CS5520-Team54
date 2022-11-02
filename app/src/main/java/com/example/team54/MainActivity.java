@@ -14,10 +14,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    //public void openAbout(View view) {
-    //    Intent aboutIntent = new Intent(this, );
-    //    startActivity(aboutIntent);
-    //}
+    public void openAbout(View view) {
+        Intent aboutIntent = new Intent(this, AboutActivity.class);
+        startActivity(aboutIntent);
+    }
 
     public void openWebServiceActivity(View view) {
         Intent webServiceIntent = new Intent(this, WebServiceActivity.class);
