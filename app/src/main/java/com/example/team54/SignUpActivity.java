@@ -3,6 +3,7 @@ package com.example.team54;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -46,6 +47,11 @@ public class SignUpActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "Sign up successful");
                             postUserToDB(email, name);
+                            Bundle userData = new Bundle();
+                            userData.putString("UID", UID);
+                            Intent stickerIntent = new Intent(getApplicationContext(), StickerActivity.class);
+                            stickerIntent.putExtras(userData);
+                            startActivity(stickerIntent);
                         } else {
                             Log.d(TAG, "Sign up failed");
                         }
