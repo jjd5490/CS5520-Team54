@@ -4,4 +4,8 @@
     <string name="web_service">Web Service</string>
     <string name="url">URL</string>
     <string name="test_call">Test Call</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="about">About</string>
+    <string name="send_stickers">Send Stickers</string>
 </resources>

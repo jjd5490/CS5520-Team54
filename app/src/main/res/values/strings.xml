@@ -11,4 +11,8 @@
     <string name="away_city">Away City</string>
 
     <string name="team_logo_unavailable_picture">Team logo unavailable picture</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="about">About</string>
+    <string name="send_stickers">Send Stickers</string>
 </resources>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "705849335454",
+    "firebase_url": "https://team54-145c2-default-rtdb.firebaseio.com",
+    "project_id": "team54-145c2",
+    "storage_bucket": "team54-145c2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705849335454:android:7599dd4a80b69dda29a58f",
+        "android_client_info": {
+          "package_name": "com.example.team54"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "705849335454-67u38dc6ok4954ntumg2mu185q8khdn9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEJhL_A_CBQgiyMTbtv_IMHYnSSyBLAUM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "705849335454-67u38dc6ok4954ntumg2mu185q8khdn9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
