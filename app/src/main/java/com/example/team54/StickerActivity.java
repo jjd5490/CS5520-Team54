@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -114,5 +115,13 @@ public class StickerActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    public void openHistory(View view) {
+        Intent historyIntent = new Intent(getApplicationContext(), HistoryActivity.class);
+        Bundle userData = new Bundle();
+        userData.putString("UID", userID);
+        historyIntent.putExtras(userData);
+        startActivity(historyIntent);
     }
 }
