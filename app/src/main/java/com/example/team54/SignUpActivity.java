@@ -16,6 +16,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SignUpActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
@@ -25,6 +28,8 @@ public class SignUpActivity extends AppCompatActivity {
     private final String TAG = "Sign-up Activity: ";
     private FirebaseDatabase db;
     private String UID;
+    List<String> test;
+    List<MessageModel> sampleMessageList;
 
 
     @Override
@@ -35,6 +40,11 @@ public class SignUpActivity extends AppCompatActivity {
         signUpEmail = findViewById(R.id.email_signup_input);
         signUpName = findViewById(R.id.name_signup_input);
         db = FirebaseDatabase.getInstance();
+        test = new ArrayList<>();
+        test.add("Liz");
+        test.add("Joey");
+        sampleMessageList = new ArrayList<>();
+        sampleMessageList.add(new MessageModel("Team54", "UID", "1234"));
     }
 
     public void onSubmit(View view) {
@@ -59,11 +69,12 @@ public class SignUpActivity extends AppCompatActivity {
                 });
     }
 
+
     public void postUserToDB(String email, String name) {
         FirebaseUser user = auth.getCurrentUser();
         if (user != null) {
             UID = user.getUid();
-            UserModel userData = new UserModel(email, UID, name);
+            UserModel userData = new UserModel(email, UID, name, test, sampleMessageList, sampleMessageList, new InboxModel("Team54", "1234", String.valueOf(System.currentTimeMillis())));
             db.getReference().child("Users").child(UID).setValue(userData);
         }
 
