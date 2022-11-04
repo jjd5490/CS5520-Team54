@@ -2,6 +2,7 @@ package com.example.team54;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,7 +50,9 @@ public class HistoryActivity extends AppCompatActivity {
         initializeHashMap();
 
         recyclerView = findViewById(R.id.receipt_history_recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
         sticker1 = findViewById(R.id.sticker1_stats);
         sticker2 = findViewById(R.id.sticker2_stats);

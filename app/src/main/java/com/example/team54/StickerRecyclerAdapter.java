@@ -1,12 +1,16 @@
 package com.example.team54;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,11 +46,13 @@ public class StickerRecyclerAdapter extends RecyclerView.Adapter<StickerRecycler
         return new ViewHolder(view);
     }
 
+    @SuppressLint("ResourceType")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.senderDetail.setText(messageList.get(position).getSenderID());
         holder.timeDetail.setText(messageList.get(position).getRecipientID());
-        holder.stickerDetail.setImageResource(R.drawable.funny);
+        int drawableID = Integer.parseInt(messageList.get(position).getResourceID());
+        holder.stickerDetail.setImageResource(drawableID);
     }
 
     @Override
