@@ -14,11 +14,12 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class StickerRecyclerAdapter extends RecyclerView.Adapter<StickerRecyclerAdapter.ViewHolder> {
 
-    private List<MessageModel> messageList;
+    public List<MessageModel> messageList;
     private Context context;
     private final int[] stickerIDs = {
             R.drawable.angry,
@@ -49,15 +50,26 @@ public class StickerRecyclerAdapter extends RecyclerView.Adapter<StickerRecycler
     @SuppressLint("ResourceType")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.senderDetail.setText(messageList.get(position).getSenderID());
-        holder.timeDetail.setText(messageList.get(position).getRecipientID());
-        int drawableID = Integer.parseInt(messageList.get(position).getResourceID());
+        MessageModel message = messageList.get(position);
+        holder.senderDetail.setText(message.getSenderID());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-YYYY hh:mm:ss");
+        Long time = Long.parseLong(message.getDateTime());
+        holder.timeDetail.setText(dateFormat.format(time));
+        int drawableID = Integer.parseInt(message.getResourceID());
         holder.stickerDetail.setImageResource(drawableID);
     }
 
     @Override
     public int getItemCount() {
-        return messageList.size();
+        if (messageList != null) {
+            return messageList.size();
+        } else {
+            return 0;
+        }
+    }
+
+    public void addMessage(MessageModel m) {
+        this.messageList.add(m);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

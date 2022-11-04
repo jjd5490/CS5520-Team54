@@ -1,18 +1,20 @@
 package com.example.team54;
 
-public class MessageModel {
+public class MessageModel implements Comparable<MessageModel> {
     private String senderID;
     private String recipientID;
     private String resourceID;
+    private String dateTime;
 
     public MessageModel() {
 
     }
 
-    public MessageModel(String senderID, String recipientID, String resourceID) {
+    public MessageModel(String senderID, String recipientID, String resourceID, String dateTime) {
         this.senderID = senderID;
         this.recipientID = recipientID;
         this.resourceID = resourceID;
+        this.dateTime = dateTime;
     }
 
     public String getSenderID() {
@@ -37,5 +39,27 @@ public class MessageModel {
 
     public void setResourceID(String resourceID) {
         this.resourceID = resourceID;
+    }
+
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    @Override
+    public int compareTo(MessageModel b) {
+        long aTime = Long.parseLong(this.getDateTime());
+        long bTime = Long.parseLong(b.getDateTime());
+
+        if (aTime == bTime) {
+            return 0;
+        } else if (aTime > bTime){
+            return -1;
+        } else {
+            return 1;
+        }
     }
 }

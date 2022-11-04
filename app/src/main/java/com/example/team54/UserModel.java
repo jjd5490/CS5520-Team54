@@ -88,6 +88,9 @@ public class UserModel {
     }
 
     public void receiveMessage(MessageModel m) {
+        if (this.messagesReceived == null) {
+            messagesReceived = new ArrayList<>();
+        }
         this.messagesReceived.add(m);
     }
 

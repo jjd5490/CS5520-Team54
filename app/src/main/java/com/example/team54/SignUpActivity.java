@@ -44,7 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
         test.add("Liz");
         test.add("Joey");
         sampleMessageList = new ArrayList<>();
-        sampleMessageList.add(new MessageModel("Team54", "UID", "1234"));
+        sampleMessageList.add(new MessageModel("Team54", "UID", "1234", String.valueOf(System.currentTimeMillis())));
     }
 
     public void onSubmit(View view) {

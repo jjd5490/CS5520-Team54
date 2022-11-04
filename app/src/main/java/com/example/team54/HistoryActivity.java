@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -15,7 +16,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class HistoryActivity extends AppCompatActivity {
 
@@ -26,9 +30,7 @@ public class HistoryActivity extends AppCompatActivity {
     private Integer[] stickerCount = new Integer[]{
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    private RecyclerView.Adapter adapter;
+
 
 
     private TextView sticker1;
@@ -49,11 +51,6 @@ public class HistoryActivity extends AppCompatActivity {
         resourceIndex = new HashMap<>();
         initializeHashMap();
 
-        recyclerView = findViewById(R.id.receipt_history_recyclerView);
-        layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
-
         sticker1 = findViewById(R.id.sticker1_stats);
         sticker2 = findViewById(R.id.sticker2_stats);
         sticker3 = findViewById(R.id.sticker3_stats);
@@ -73,16 +70,16 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     public void initializeHashMap() {
-        resourceIndex.put("1", 0);
-        resourceIndex.put("2", 1);
-        resourceIndex.put("3", 2);
-        resourceIndex.put("4", 3);
-        resourceIndex.put("5", 4);
-        resourceIndex.put("6", 5);
-        resourceIndex.put("7", 6);
-        resourceIndex.put("8", 7);
-        resourceIndex.put("9", 8);
-        resourceIndex.put("10", 9);
+        resourceIndex.put(String.valueOf(R.drawable.angry), 0);
+        resourceIndex.put(String.valueOf(R.drawable.funny), 1);
+        resourceIndex.put(String.valueOf(R.drawable.glasses), 2);
+        resourceIndex.put(String.valueOf(R.drawable.scream), 3);
+        resourceIndex.put(String.valueOf(R.drawable.sick), 4);
+        resourceIndex.put(String.valueOf(R.drawable.sleepy), 5);
+        resourceIndex.put(String.valueOf(R.drawable.smile), 6);
+        resourceIndex.put(String.valueOf(R.drawable.thinking), 7);
+        resourceIndex.put(String.valueOf(R.drawable.unamused), 8);
+        resourceIndex.put(String.valueOf(R.drawable.wink), 9);
     }
 
     public void updateStats() {
@@ -90,8 +87,6 @@ public class HistoryActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 user = task.getResult().getValue(UserModel.class);
-                adapter = new StickerRecyclerAdapter(user.getMessagesReceived(), getApplicationContext());
-                recyclerView.setAdapter(adapter);
 
                 for (MessageModel m : user.getMessagesSent()) {
                     stickerCount[resourceIndex.get(m.getResourceID())] += 1;
@@ -101,6 +96,7 @@ public class HistoryActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     public void drawStats() {
         sticker1.setText(stickerCount[0].toString());
         sticker2.setText(stickerCount[1].toString());
