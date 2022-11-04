@@ -10,6 +10,7 @@ public class UserModel {
     private String email;
     private String UID;
     private String name;
+    private String deviceToken;
     private List<String> contacts;
     private List<MessageModel> messagesReceived;
     private List<MessageModel> messagesSent;
@@ -27,12 +28,13 @@ public class UserModel {
 
     }
 
-    public UserModel(String email, String UID, String name, List<String> contacts,
+    public UserModel(String email, String UID, String name, String deviceToken, List<String> contacts,
                      List<MessageModel> messagesReceived, List<MessageModel> messagesSent,
                      InboxModel inbox) {
         this.UID = UID;
         this.email = email;
         this.name = name;
+        this.deviceToken = deviceToken;
         this.contacts = contacts;
         this.messagesReceived = messagesReceived;
         this.messagesSent = messagesSent;
@@ -92,6 +94,14 @@ public class UserModel {
             messagesReceived = new ArrayList<>();
         }
         this.messagesReceived.add(m);
+    }
+
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
     }
 
     @Override

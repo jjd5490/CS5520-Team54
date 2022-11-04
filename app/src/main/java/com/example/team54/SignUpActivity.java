@@ -15,6 +15,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class SignUpActivity extends AppCompatActivity {
     private String UID;
     List<String> test;
     List<MessageModel> sampleMessageList;
+    String clientToken;
 
 
     @Override
@@ -72,11 +74,18 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void postUserToDB(String email, String name) {
         FirebaseUser user = auth.getCurrentUser();
-        if (user != null) {
-            UID = user.getUid();
-            UserModel userData = new UserModel(email, UID, name, test, sampleMessageList, sampleMessageList, new InboxModel("Team54", "1234", String.valueOf(System.currentTimeMillis())));
-            db.getReference().child("Users").child(UID).setValue(userData);
-        }
-
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (task.isSuccessful()) {
+                    clientToken = task.getResult();
+                    if (user != null) {
+                        UID = user.getUid();
+                        UserModel userData = new UserModel(email, UID, name, clientToken, test, sampleMessageList, sampleMessageList, new InboxModel("Team54", "2131165334", String.valueOf(System.currentTimeMillis())));
+                        db.getReference().child("Users").child(UID).setValue(userData);
+                    }
+                }
+            }
+        });
     }
 }
