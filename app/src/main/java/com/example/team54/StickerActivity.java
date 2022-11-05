@@ -147,6 +147,14 @@ public class StickerActivity extends AppCompatActivity {
                 });
     }
 
+    public void openSendMessage(View view) {
+        Intent messageIntent = new Intent(getApplicationContext(), SendMessage.class);
+        Bundle userData = new Bundle();
+        userData.putString("UID", userID);
+        messageIntent.putExtras(userData);
+        startActivity(messageIntent);
+    }
+
     public void openHistory(View view) {
         Intent historyIntent = new Intent(getApplicationContext(), HistoryActivity.class);
         Bundle userData = new Bundle();

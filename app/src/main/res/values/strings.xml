@@ -17,4 +17,21 @@
     <string name="send_stickers">Send Stickers</string>
     <string name="team_54_name">Team 54</string>
     <string name="francisco_rovirosa_and_james_dudek">Francisco Rovirosa and James Dudek</string>
+    <string name="send_sticker">Send Sticker</string>
+    <string name="user_id">User Id: -</string>
+    <string name="select_contact">Select Contact</string>
+    <string name="select_sticker">Select Sticker</string>
+    <string name="send_message">Send Message</string>
+    <string-array name="emoji_names">
+        <item>Angry</item>
+        <item>Funny</item>
+        <item>Glasses</item>
+        <item>Scream</item>
+        <item>Sick</item>
+        <item>Sleppy</item>
+        <item>Smile</item>
+        <item>Thinking</item>
+        <item>Unamused</item>
+        <item>Wink</item>
+    </string-array>
 </resources>
