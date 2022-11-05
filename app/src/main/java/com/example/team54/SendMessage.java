@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -18,74 +19,114 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class SendMessage extends AppCompatActivity {
     private static final String TAG ="SendMessageActivity";
-    private FirebaseDatabase mDatabase;
-    private DatabaseReference userRef;
-    private TextView userIdTV;
-    private String userId;
-    private Spinner emojiSpinner;
+    private FirebaseDatabase db;
+    private DatabaseReference uniqueUserRef;
+    private String userId, emojiSelected, contactSelected;
+    private Spinner emojiSpinner, contactSpinner;
+    private List<String> contacts;
+    private HashMap<String, Integer> resourceIndex;
+    private Integer emojiSelId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_message);
 
-        userIdTV = findViewById(R.id.textView2);
-        emojiSpinner = findViewById(R.id.emoji_spinner);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.emoji_names, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        emojiSpinner.setAdapter(adapter);
-
         if(getIntent().getExtras() != null) {
             userId = getIntent().getExtras().getString("UID");
-//            userIdTV.setText(userId);
         }
         Log.d(TAG, "UID: " + userId);
 
-        mDatabase = FirebaseDatabase.getInstance();
-        userRef = mDatabase.getReference("Users");
+        db = FirebaseDatabase.getInstance();
+        uniqueUserRef = db.getReference().child("Users/"+userId+"/contacts");
+        contacts = new ArrayList<>();
+        contacts.add("Select ...");
+        contactSpinner = findViewById(R.id.contact_spinner);
+        emojiSpinner = findViewById(R.id.emoji_spinner);
 
-//        userRef = FirebaseDatabase.getInstance().getReference().child("Users").
-//                child(userId).child("contacts");
-        Log.d(TAG, "Users contacts: " + userRef);
-        userRef.addValueEventListener(new ValueEventListener() {
+        resourceIndex = new HashMap<>();
+        resourceIndex.put("Angry", 0);
+        resourceIndex.put("Funny", 1);
+        resourceIndex.put("Glasses", 2);
+        resourceIndex.put("Scream", 3);
+        resourceIndex.put("Sick", 4);
+        resourceIndex.put("Sleepy", 5);
+        resourceIndex.put("Smile", 6);
+        resourceIndex.put("Thinking", 7);
+        resourceIndex.put("Unamused", 8);
+        resourceIndex.put("Wink", 9);
+
+
+        ArrayAdapter<CharSequence> adapterEmoji = ArrayAdapter.createFromResource(this, R.array.emoji_names, android.R.layout.simple_spinner_item);
+        adapterEmoji.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        emojiSpinner.setAdapter(adapterEmoji);
+        emojiSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserModel users = dataSnapshot.getValue(UserModel.class);
-                Log.d(TAG, "Users: " + users);
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-//                    String ma = snapshot.child("contacts").getValue().toString();
-                    //Log.d(TAG, "Users contacts: " + ma);
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i != 0) {
+                    emojiSelected = (String) adapterView.getItemAtPosition(i);
+                    emojiSelId = resourceIndex.get(emojiSelected);
+                    Log.d(TAG,"Emoji: " + emojiSelected);
+                    Log.d(TAG,"Emoji ID: " + emojiSelId);
+                }
             }
-//               String ma = dataSnapshot.getValue().toString();
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
         });
 
 
-//    images
+        uniqueUserRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot datasnapshot : dataSnapshot.getChildren()){
+                    if(datasnapshot.exists()){
+                        contacts.add(datasnapshot.getValue().toString());
+                    }
+                }
+                Log.d(TAG, "Contacts: " + contacts);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        });
+
+        ArrayAdapter<String> adapterContacts = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, contacts);
+        adapterContacts.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        contactSpinner.setAdapter(adapterContacts);
+        contactSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i != 0){
+                    contactSelected = (String)adapterView.getItemAtPosition(i);
+                    Log.d(TAG, "contact: " + contactSelected);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
 
 
-
-
-
+    public void sendMessageToContact(View view) {
+        String strInfo = "Sender: " + userId + " // Receiver: " + contactSelected +
+                " // Emoji: " + emojiSelected + " // Emoji Id: " + emojiSelId;
+        Log.d(TAG, strInfo);
     }
 }
 
-//public class SendMessage extends Activity implements AdapterView.OnItemSelectedListener {
-//    private static final String TAG ="SendMessageActivity";
-//    public void onItemSelected(AdapterView<?>parent, View view, int pos, long id) {
-//        int itemSelected = (int) parent.getItemAtPosition(pos);
-//        Log.d(TAG, "sticker choosen: " + itemSelected);
-//    }
-//
-//    @Override
-//    public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//    }
-//}

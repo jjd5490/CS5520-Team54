@@ -19,10 +19,12 @@
     <string name="francisco_rovirosa_and_james_dudek">Francisco Rovirosa and James Dudek</string>
     <string name="send_sticker">Send Sticker</string>
     <string name="user_id">User Id: -</string>
-    <string name="select_contact">Select Contact</string>
-    <string name="select_sticker">Select Sticker</string>
-    <string name="send_message">Send Message</string>
+    <string name="select_contact">My Contacts</string>
+    <string name="select_sticker">My Stickers</string>
+    <string name="send_message">Send</string>
+    <string name="send_a_sticker">Send a Sticker</string>
     <string-array name="emoji_names">
+        <item>Select ...</item>
         <item>Angry</item>
         <item>Funny</item>
         <item>Glasses</item>
