@@ -31,7 +31,7 @@ public class SignUpActivity extends AppCompatActivity {
     private String UID;
     List<String> test;
     List<MessageModel> sampleMessageList;
-    String clientToken;
+    String deviceToken;
 
 
     @Override
@@ -46,7 +46,7 @@ public class SignUpActivity extends AppCompatActivity {
         test.add("Liz");
         test.add("Joey");
         sampleMessageList = new ArrayList<>();
-        sampleMessageList.add(new MessageModel("Team54", "UID", "1234", String.valueOf(System.currentTimeMillis())));
+        sampleMessageList.add(new MessageModel("Team54", "UID", "2131165334", String.valueOf(System.currentTimeMillis())));
     }
 
     public void onSubmit(View view) {
@@ -74,14 +74,14 @@ public class SignUpActivity extends AppCompatActivity {
 
     public void postUserToDB(String email, String name) {
         FirebaseUser user = auth.getCurrentUser();
+        UID = user.getUid();
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
                 if (task.isSuccessful()) {
-                    clientToken = task.getResult();
+                    deviceToken = task.getResult();
                     if (user != null) {
-                        UID = user.getUid();
-                        UserModel userData = new UserModel(email, UID, name, clientToken, test, sampleMessageList, sampleMessageList, new InboxModel("Team54", "2131165334", String.valueOf(System.currentTimeMillis())));
+                        UserModel userData = new UserModel(email, UID, name, deviceToken, test, sampleMessageList, sampleMessageList, new InboxModel("Team54", "2131165334", String.valueOf(System.currentTimeMillis())));
                         db.getReference().child("Users").child(UID).setValue(userData);
                     }
                 }

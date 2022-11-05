@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -105,10 +106,16 @@ public class StickerActivity extends AppCompatActivity {
     }
 
     public void loadUser(UserCallback callback) {
-        db.getReference().child("Users/" + userID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        db.getReference().child("Users").child(userID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
-                callback.onGetUser(task.getResult().getValue(UserModel.class));
+                if (task.isSuccessful()) {
+                    Log.d("**************************", task.getResult().toString());
+                    user = task.getResult().getValue(UserModel.class);
+                    if (user != null) {
+                        callback.onGetUser(task.getResult().getValue(UserModel.class));
+                    }
+                }
             }
         });
     }
