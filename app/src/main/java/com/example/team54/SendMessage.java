@@ -3,15 +3,13 @@ package com.example.team54;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
+
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,12 +24,14 @@ import java.util.List;
 public class SendMessage extends AppCompatActivity {
     private static final String TAG ="SendMessageActivity";
     private FirebaseDatabase db;
-    private DatabaseReference uniqueUserRef;
-    private String userId, emojiSelected, contactSelected;
+    private DatabaseReference usersRef;
+    private String userId, emojiSelected, receiverId;
+    private Integer contactPositionSelected;
     private Spinner emojiSpinner, contactSpinner;
-    private List<String> contacts;
+    private List<String> contactsName, contactsID;
     private HashMap<String, Integer> resourceIndex;
     private Integer emojiSelId;
+    private List<UserModel> usersData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +44,10 @@ public class SendMessage extends AppCompatActivity {
         Log.d(TAG, "UID: " + userId);
 
         db = FirebaseDatabase.getInstance();
-        uniqueUserRef = db.getReference().child("Users/"+userId+"/contacts");
-        contacts = new ArrayList<>();
-        contacts.add("Select ...");
+        usersRef = db.getReference("Users");
+        contactsName = new ArrayList<>();
+        contactsID = new ArrayList<>();
+        contactsName.add("Select ...");
         contactSpinner = findViewById(R.id.contact_spinner);
         emojiSpinner = findViewById(R.id.emoji_spinner);
 
@@ -63,7 +64,8 @@ public class SendMessage extends AppCompatActivity {
         resourceIndex.put("Wink", 9);
 
 
-        ArrayAdapter<CharSequence> adapterEmoji = ArrayAdapter.createFromResource(this, R.array.emoji_names, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapterEmoji = ArrayAdapter.createFromResource(this,
+                R.array.emoji_names, android.R.layout.simple_spinner_item);
         adapterEmoji.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         emojiSpinner.setAdapter(adapterEmoji);
         emojiSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -83,35 +85,37 @@ public class SendMessage extends AppCompatActivity {
             }
         });
 
-
-        uniqueUserRef.addValueEventListener(new ValueEventListener() {
+        usersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                usersData = new ArrayList<UserModel>();
+
                 for (DataSnapshot datasnapshot : dataSnapshot.getChildren()){
-                    if(datasnapshot.exists()){
-                        contacts.add(datasnapshot.getValue().toString());
-                    }
+                    UserModel user = datasnapshot.getValue(UserModel.class);
+                    usersData.add(user);
                 }
-                Log.d(TAG, "Contacts: " + contacts);
+                for (UserModel user : usersData) {
+                    contactsID.add(user.getUID());
+                    contactsName.add(user.getName());
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-
         });
 
         ArrayAdapter<String> adapterContacts = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item, contacts);
+                this, android.R.layout.simple_spinner_item, contactsName);
         adapterContacts.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         contactSpinner.setAdapter(adapterContacts);
         contactSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(i != 0){
-                    contactSelected = (String)adapterView.getItemAtPosition(i);
-                    Log.d(TAG, "contact: " + contactSelected);
+                    contactPositionSelected = i-1;
+                    Log.d(TAG, "Contact Position: **********" + contactPositionSelected);
                 }
             }
 
@@ -122,10 +126,10 @@ public class SendMessage extends AppCompatActivity {
         });
     }
 
-
     public void sendMessageToContact(View view) {
-        String strInfo = "Sender: " + userId + " // Receiver: " + contactSelected +
-                " // Emoji: " + emojiSelected + " // Emoji Id: " + emojiSelId;
+        receiverId = contactsID.get(contactPositionSelected);
+        String strInfo = "Sender: " + userId + " // Receiver: " + receiverId +
+            " // Emoji: " + emojiSelected + " // Emoji Id: " + emojiSelId;
         Log.d(TAG, strInfo);
     }
 }
