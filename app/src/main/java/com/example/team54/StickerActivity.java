@@ -70,15 +70,17 @@ public class StickerActivity extends AppCompatActivity {
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        Toast.makeText(getApplicationContext(), "New message received", Toast.LENGTH_LONG).show();
                         db.getReference().child("Users/" + userID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DataSnapshot> task) {
                                 user = task.getResult().getValue(UserModel.class);
                                 List<MessageModel> messagesReceived = user.getMessagesReceived();
-                                Collections.sort(messagesReceived);
-                                StickerRecyclerAdapter newAdapter = new StickerRecyclerAdapter(messagesReceived, getApplicationContext());
-                                recyclerView.setAdapter(newAdapter);
+                                if (messagesReceived != null) {
+                                    Collections.sort(messagesReceived);
+                                    StickerRecyclerAdapter newAdapter = new StickerRecyclerAdapter(messagesReceived, getApplicationContext());
+                                    recyclerView.setAdapter(newAdapter);
+                                }
+
                             }
                         });
                     }

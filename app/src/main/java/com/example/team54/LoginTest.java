@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -59,7 +60,9 @@ public class LoginTest extends AppCompatActivity {
                             startActivity(stickerIntent);
 
                         } else {
+                            Log.d(TAG, task.getException().toString());
                             Log.d(TAG, "sign in failed");
+
                         }
                     }
                 });

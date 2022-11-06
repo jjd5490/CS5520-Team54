@@ -56,6 +56,7 @@ public class StickerRecyclerAdapter extends RecyclerView.Adapter<StickerRecycler
         Long time = Long.parseLong(message.getDateTime());
         holder.timeDetail.setText(dateFormat.format(time));
         int drawableID = Integer.parseInt(message.getResourceID());
+        Log.d("**************************", String.valueOf(drawableID));
         holder.stickerDetail.setImageResource(drawableID);
     }
 

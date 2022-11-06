@@ -23,6 +23,7 @@
     <string name="select_sticker">My Stickers</string>
     <string name="send_message">Send</string>
     <string name="send_a_sticker">Send a Sticker</string>
+    <string name="sticker">sticker</string>
     <string-array name="emoji_names">
         <item>Select ...</item>
         <item>Angry</item>

@@ -81,7 +81,15 @@ public class SignUpActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     deviceToken = task.getResult();
                     if (user != null) {
-                        UserModel userData = new UserModel(email, UID, name, deviceToken, test, sampleMessageList, sampleMessageList, new InboxModel("Team54", "2131165334", String.valueOf(System.currentTimeMillis())));
+                        //UserModel userData = new UserModel(email, UID, name, deviceToken, test, sampleMessageList, sampleMessageList, new InboxModel("Team54", "2131165334", String.valueOf(System.currentTimeMillis())));
+                        UserModel userData = new UserModel(email,
+                                UID,
+                                name,
+                                deviceToken,
+                                new ArrayList<>(),
+                                new ArrayList<>(),
+                                new ArrayList<>(),
+                                new InboxModel());
                         db.getReference().child("Users").child(UID).setValue(userData);
                     }
                 }

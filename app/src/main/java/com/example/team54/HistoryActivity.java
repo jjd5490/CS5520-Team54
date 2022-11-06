@@ -87,9 +87,11 @@ public class HistoryActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 user = task.getResult().getValue(UserModel.class);
-
-                for (MessageModel m : user.getMessagesSent()) {
-                    stickerCount[resourceIndex.get(m.getResourceID())] += 1;
+                List<MessageModel> messagesSent = user.getMessagesSent();
+                if (messagesSent != null) {
+                    for (MessageModel m : messagesSent) {
+                        stickerCount[resourceIndex.get(m.getResourceID())] += 1;
+                    }
                 }
                 drawStats();
             }
