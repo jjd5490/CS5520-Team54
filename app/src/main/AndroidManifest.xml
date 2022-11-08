@@ -4,6 +4,7 @@
     package="com.example.team54">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
         android:allowBackup="true"
@@ -14,6 +15,7 @@
         android:roundIcon="@mipmap/team54_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Team54"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
             android:name=".SendMessage"

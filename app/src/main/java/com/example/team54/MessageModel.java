@@ -51,9 +51,15 @@ public class MessageModel implements Comparable<MessageModel> {
 
     @Override
     public int compareTo(MessageModel b) {
+        if (b == null) {
+            return -1;
+        }
         long aTime = Long.parseLong(this.getDateTime());
         long bTime = Long.parseLong(b.getDateTime());
 
+        return Long.compare(aTime, bTime);
+
+/**
         if (aTime == bTime) {
             return 0;
         } else if (aTime > bTime){
@@ -61,5 +67,6 @@ public class MessageModel implements Comparable<MessageModel> {
         } else {
             return 1;
         }
+ **/
     }
 }

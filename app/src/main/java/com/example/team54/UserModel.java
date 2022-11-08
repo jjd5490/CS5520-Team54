@@ -104,6 +104,17 @@ public class UserModel {
         this.messagesReceived.add(m);
     }
 
+    public void sendMessage(MessageModel m) {
+        if (this.messagesSent == null) {
+            messagesSent = new ArrayList<>();
+        }
+        this.messagesSent.add(m);
+    }
+
+    public void updateInbox(String senderID, String resourceID) {
+        this.inbox = new InboxModel(senderID, resourceID, String.valueOf(System.currentTimeMillis()));
+    }
+
     @Override
     public String toString() {
         return "User = " + UID + ", " + email + ", " + name;

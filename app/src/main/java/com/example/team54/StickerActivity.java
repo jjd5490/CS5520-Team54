@@ -3,11 +3,20 @@ package com.example.team54;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -42,6 +51,7 @@ public class StickerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sticker);
+        createChannel();
         recyclerView = findViewById(R.id.receipt_history_recyclerView);
         layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -66,7 +76,7 @@ public class StickerActivity extends AppCompatActivity {
         });
 
         db.getReference().child("Users/" + userID)
-                .child("inbox")
+                .child("messagesReceived")
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -74,13 +84,19 @@ public class StickerActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<DataSnapshot> task) {
                                 user = task.getResult().getValue(UserModel.class);
+                                InboxModel inboxModel = user.getInbox();
+                                if (inboxModel != null) {
+                                    long lastSent = Long.valueOf(inboxModel.getDate());
+                                    if ((System.currentTimeMillis() - lastSent) < 5000) {
+                                        notifyUser(inboxModel.getSenderID(), inboxModel.getResourceID());
+                                    }
+                                }
                                 List<MessageModel> messagesReceived = user.getMessagesReceived();
                                 if (messagesReceived != null) {
                                     Collections.sort(messagesReceived);
                                     StickerRecyclerAdapter newAdapter = new StickerRecyclerAdapter(messagesReceived, getApplicationContext());
                                     recyclerView.setAdapter(newAdapter);
                                 }
-
                             }
                         });
                     }
@@ -105,6 +121,14 @@ public class StickerActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent backHome = new Intent(this, MainActivity.class);
+        backHome.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(backHome);
     }
 
     public void loadUser(UserCallback callback) {
@@ -163,5 +187,39 @@ public class StickerActivity extends AppCompatActivity {
         userData.putString("UID", userID);
         historyIntent.putExtras(userData);
         startActivity(historyIntent);
+    }
+
+    public void createChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel msgChannel = new NotificationChannel("100",
+                    "Sticker Inbox",
+                    NotificationManager.IMPORTANCE_HIGH);
+            msgChannel.setDescription("Notifies users when friends send them a sticker");
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(msgChannel);
+        }
+    }
+
+    public void notifyUser(String sender, String resourceID) {
+        Bitmap emojiIcon = BitmapFactory.decodeResource(getApplicationContext().getResources(),
+                Integer.parseInt(resourceID));
+        Intent replyIntent = new Intent(getApplicationContext(), SendMessage.class);
+        PendingIntent pendingReply = PendingIntent.getActivity(this, 0, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent openInbox = new Intent(this, StickerActivity.class);
+        Bundle userData = new Bundle();
+        userData.putString("UID", userID);
+        openInbox.putExtras(userData);
+        replyIntent.putExtras(userData);
+        PendingIntent pendingOpen = PendingIntent.getActivity(this, 0, openInbox, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "100")
+                .setContentTitle(sender + " sent you a new sticker!!!")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setSmallIcon(R.drawable.team54_icon_foreground)
+                .setLargeIcon(emojiIcon)
+                .setContentIntent(pendingOpen)
+                .setAutoCancel(true)
+                .addAction(0, "Reply", pendingReply);
+        NotificationManagerCompat manager = NotificationManagerCompat.from(this);
+        manager.notify(1, builder.build());
     }
 }
