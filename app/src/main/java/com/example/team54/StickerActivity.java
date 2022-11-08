@@ -203,22 +203,12 @@ public class StickerActivity extends AppCompatActivity {
     public void notifyUser(String sender, String resourceID) {
         Bitmap emojiIcon = BitmapFactory.decodeResource(getApplicationContext().getResources(),
                 Integer.parseInt(resourceID));
-        Intent replyIntent = new Intent(getApplicationContext(), SendMessage.class);
-        PendingIntent pendingReply = PendingIntent.getActivity(this, 0, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Intent openInbox = new Intent(this, StickerActivity.class);
-        Bundle userData = new Bundle();
-        userData.putString("UID", userID);
-        openInbox.putExtras(userData);
-        replyIntent.putExtras(userData);
-        PendingIntent pendingOpen = PendingIntent.getActivity(this, 0, openInbox, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "100")
                 .setContentTitle(sender + " sent you a new sticker!!!")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setSmallIcon(R.drawable.team54_icon_foreground)
                 .setLargeIcon(emojiIcon)
-                .setContentIntent(pendingOpen)
-                .setAutoCancel(true)
-                .addAction(0, "Reply", pendingReply);
+                .setAutoCancel(true);
         NotificationManagerCompat manager = NotificationManagerCompat.from(this);
         manager.notify(1, builder.build());
     }
