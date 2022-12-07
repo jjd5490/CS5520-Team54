@@ -29,4 +29,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(loginIntent);
     }
 
+    public void openWordClashActivity(View view) {
+        Intent wordClashIntent = new Intent(this, WordClash.class);
+        startActivity(wordClashIntent);
+    }
+
 }
