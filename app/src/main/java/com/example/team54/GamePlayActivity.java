@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -40,6 +41,7 @@ public class GamePlayActivity extends AppCompatActivity {
     ImageView LetterBank10;
     ImageView LetterBank11;
     List<ImageView> imageViews;
+    List<ImageView> imageStack;
 
     Vibrator vibe;
     VibrationEffect vibrationEffect;
@@ -70,6 +72,7 @@ public class GamePlayActivity extends AppCompatActivity {
         LetterBank11 = findViewById(R.id.letter_bank_11);
 
         imageViews = new ArrayList<>();
+        imageStack = new ArrayList<>();
 
         imageViews.add(LetterBank1);
         imageViews.add(LetterBank2);
@@ -115,14 +118,50 @@ public class GamePlayActivity extends AppCompatActivity {
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                v.setVisibility(View.INVISIBLE);
+                v.setClickable(false);
                 vibe.vibrate(vibrationEffect);
                 TextView t = new TextView(GamePlayActivity.this);
-                String letter = vowelLookup.get(vowel_positions[position]);
+                String letter;
+                if (position < 4) {
+                    letter = vowelLookup.get(vowel_positions[position]);
+                } else {
+                    letter = consonantLookup.get(consonant_positions[position - 4]);
+                }
                 t.setText(letter);
                 t.setTextSize(24);
                 wordBuildLayout.addView(t);
+                imageStack.add(v);
             }
         });
+    }
+
+    public String getString(View view) {
+        String word = "";
+        if (wordBuildLayout != null) {
+            Integer numLetters = wordBuildLayout.getChildCount();
+            if (numLetters > 0) {
+                for (int i = 0; i < numLetters; i++) {
+                    TextView t = (TextView) wordBuildLayout.getChildAt(i);
+                    if (t != null) {
+                        String l = (String)t.getText();
+                        if (l != null) {
+                            word = word + l;
+                        }
+                    }
+                }
+            }
+        }
+        return word;
+    }
+
+    public void removeLetter(View view) {
+        ImageView v = imageStack.get(imageStack.size() - 1);
+        imageStack.remove(imageStack.size() - 1);
+        v.setVisibility(View.VISIBLE);
+        v.setClickable(true);
+        int count = wordBuildLayout.getChildCount() - 1;
+        wordBuildLayout.removeViewAt(count);
     }
 
     public void generateRandomLetters() {
