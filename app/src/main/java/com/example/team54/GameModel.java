@@ -7,21 +7,21 @@ import com.google.gson.annotations.SerializedName;
 
 public class GameModel implements Parcelable {
     @SerializedName("id")
-    private Integer id;
+    private final Integer id;
     @SerializedName("date")
-    private String date;
+    private final String date;
     @SerializedName("home_team_score")
-    private Integer home_score;
+    private final Integer home_score;
 
     @SerializedName("visitor_team_score")
-    private Integer visitor_score;
-    private TeamModel home_team;
-    private TeamModel visitor_team;
-    private boolean postseason;
-    private Integer season;
+    private final Integer visitor_score;
+    private final TeamModel home_team;
+    private final TeamModel visitor_team;
+    private final boolean postseason;
+    private final Integer season;
 
 
-    private String status;
+    private final String status;
 
     public GameModel(Integer id, String date, Integer home_score, Integer visitor_score, TeamModel home_team,
                      TeamModel visitor_team, boolean postseason, Integer season, String status) {

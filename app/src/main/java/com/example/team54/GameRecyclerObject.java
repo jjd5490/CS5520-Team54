@@ -4,16 +4,16 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class GameRecyclerObject implements Parcelable {
-    private Integer home_id;
-    private Integer visitor_id;
-    private String home_city;
-    private String visitor_city;
-    private String home_name;
-    private String visitor_name;
-    private Integer home_score;
-    private Integer visitor_score;
-    private String status;
-    private String date;
+    private final Integer home_id;
+    private final Integer visitor_id;
+    private final String home_city;
+    private final String visitor_city;
+    private final String home_name;
+    private final String visitor_name;
+    private final Integer home_score;
+    private final Integer visitor_score;
+    private final String status;
+    private final String date;
 
     public GameRecyclerObject(Integer home_id, Integer visitor_id, String home_city,
                               String visitor_city, String home_name, String visitor_name,

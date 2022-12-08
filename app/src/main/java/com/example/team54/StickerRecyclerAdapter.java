@@ -20,7 +20,7 @@ import java.util.List;
 public class StickerRecyclerAdapter extends RecyclerView.Adapter<StickerRecyclerAdapter.ViewHolder> {
 
     public List<MessageModel> messageList;
-    private Context context;
+    private final Context context;
     private final int[] stickerIDs = {
             R.drawable.angry,
             R.drawable.funny,

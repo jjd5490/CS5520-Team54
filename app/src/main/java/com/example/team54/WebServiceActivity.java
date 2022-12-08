@@ -65,11 +65,11 @@ public class WebServiceActivity extends AppCompatActivity {
         gameTypeSelection.check(R.id.all_games);
 
         TeamNames[] teamList = TeamNames.values();
-        ArrayAdapter<TeamNames> teamAdapter = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, teamList);
-        teamDropDown.setAdapter(teamAdapter);
+        //ArrayAdapter<TeamNames> teamAdapter = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, teamList);
+        //teamDropDown.setAdapter(teamAdapter);
 
-        ArrayAdapter<Integer> seasonAdapter = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, SEASONS);
-        seasonDropDown.setAdapter(seasonAdapter);
+        //ArrayAdapter<Integer> seasonAdapter = new ArrayAdapter<>(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, SEASONS);
+        //seasonDropDown.setAdapter(seasonAdapter);
 
         testCall = findViewById(R.id.test_call);
         testCall.setOnClickListener(new View.OnClickListener() {

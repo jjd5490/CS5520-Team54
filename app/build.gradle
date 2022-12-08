@@ -4,6 +4,9 @@ plugins {
 }
 
 android {
+    signingConfigs {
+
+    }
     compileSdk 32
 
     defaultConfig {

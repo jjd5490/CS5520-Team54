@@ -8,15 +8,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class TeamModel implements Parcelable {
     @SerializedName("id")
-    private Integer team_id;
+    private final Integer team_id;
     @SerializedName("abbreviation")
-    private String city;
+    private final String city;
     @SerializedName("conference")
-    private String conference;
+    private final String conference;
     @SerializedName("division")
-    private String division;
+    private final String division;
     @SerializedName("name")
-    private String name;
+    private final String name;
 
     public TeamModel(Integer team_id, String city, String conference, String division, String name) {
         this.team_id = team_id;

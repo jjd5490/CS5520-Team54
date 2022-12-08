@@ -27,7 +27,7 @@ public class HistoryActivity extends AppCompatActivity {
     private String userID;
     private UserModel user;
     private HashMap<String, Integer> resourceIndex;
-    private Integer[] stickerCount = new Integer[]{
+    private final Integer[] stickerCount = new Integer[]{
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
