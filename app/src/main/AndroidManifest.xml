@@ -5,7 +5,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
@@ -19,6 +18,12 @@
         android:theme="@style/Theme.Team54"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".WordClashSignup"
+            android:exported="false" />
+        <activity
+            android:name=".WordClashLogin"
+            android:exported="false" />
         <activity
             android:name=".GamePlayActivity"
             android:exported="false" />

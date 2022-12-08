@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openWordClashActivity(View view) {
-        Intent wordClashIntent = new Intent(this, WordClash.class);
+        Intent wordClashIntent = new Intent(this, WordClashLogin.class);
         startActivity(wordClashIntent);
     }
 

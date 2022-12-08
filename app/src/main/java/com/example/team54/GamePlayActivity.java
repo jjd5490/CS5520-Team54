@@ -119,7 +119,7 @@ public class GamePlayActivity extends AppCompatActivity {
                     letter = consonantLookup.get(consonant_positions[position - 4]);
                 }
                 t.setText(letter);
-                t.setTextSize(24);
+                t.setTextSize(32);
                 wordBuildLayout.addView(t);
                 imageStack.add(v);
             }
@@ -146,12 +146,15 @@ public class GamePlayActivity extends AppCompatActivity {
     }
 
     public void removeLetter(View view) {
-        ImageView v = imageStack.get(imageStack.size() - 1);
-        imageStack.remove(imageStack.size() - 1);
-        v.setVisibility(View.VISIBLE);
-        v.setClickable(true);
-        int count = wordBuildLayout.getChildCount() - 1;
-        wordBuildLayout.removeViewAt(count);
+        int stackSize = imageStack.size();
+        if (stackSize > 0) {
+            ImageView v = imageStack.get(stackSize - 1);
+            imageStack.remove(stackSize - 1);
+            v.setVisibility(View.VISIBLE);
+            v.setClickable(true);
+            int count = wordBuildLayout.getChildCount() - 1;
+            wordBuildLayout.removeViewAt(count);
+        }
     }
 
     public void generateRandomLetters() {
