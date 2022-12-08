@@ -89,17 +89,7 @@ public class GamePlayActivity extends AppCompatActivity {
         // Set ImageView resources for letter bank
         drawLetterBank();
 
-        wordBuildLayout = new LinearLayout(this);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-        );
-        wordBuildLayout.setLayoutParams(params);
-        wordBuildLayout.setOrientation(LinearLayout.HORIZONTAL);
-        wordBuildLayout.setGravity(Gravity.CENTER);
-
-        ConstraintLayout main = findViewById(R.id.game_content_layout);
-        main.addView(wordBuildLayout);
+        wordBuildLayout = findViewById(R.id.string_container);
 
         // Vibrator object to play on letter click
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
