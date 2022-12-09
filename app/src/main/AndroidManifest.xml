@@ -19,6 +19,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RulesActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
+            android:name=".HighScoresActivity"
+            android:exported="false" />
+        <activity
             android:name=".OpponentSelection"
             android:exported="false" />
         <activity
