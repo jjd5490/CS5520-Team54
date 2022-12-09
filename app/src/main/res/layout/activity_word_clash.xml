@@ -23,16 +23,18 @@
         android:id="@+id/rules"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Rules"
-        app:layout_constraintBottom_toTopOf="@+id/game_settings"
+        android:onClick="openRules"
+        android:text="@string/rules"
+        app:layout_constraintBottom_toTopOf="@+id/high_scores"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/play" />
 
     <Button
-        android:id="@+id/game_settings"
+        android:id="@+id/high_scores"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="openScores"
         android:text="@string/high_scores"
         app:layout_constraintBottom_toTopOf="@+id/settings"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,11 +45,12 @@
         android:id="@+id/settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="openSettings"
         android:text="@string/settings"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/game_settings" />
+        app:layout_constraintTop_toBottomOf="@+id/high_scores" />
 
     <TextView
         android:id="@+id/textView"
@@ -59,4 +62,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
