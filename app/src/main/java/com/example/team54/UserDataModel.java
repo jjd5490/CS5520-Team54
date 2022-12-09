@@ -5,11 +5,11 @@ import java.util.List;
 
 public class UserDataModel {
 
-    String username;
-    int balance;
-    String word;
-    List<Integer> vowel_positions;
-    List<Integer> consonant_positions;
+    public String username;
+    public int balance;
+    public String word;
+    public List<Integer> vowel_positions;
+    public List<Integer> consonant_positions;
 
     public UserDataModel() {
 
