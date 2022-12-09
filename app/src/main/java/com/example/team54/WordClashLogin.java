@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +35,7 @@ public class WordClashLogin extends AppCompatActivity {
 
     public void login(View view) {
         username = un.getText().toString();
-        List<String> users = new ArrayList<>();
+        ArrayList<String> users = new ArrayList<>();
 
         db.getReference().child("WCUserList").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -47,7 +48,10 @@ public class WordClashLogin extends AppCompatActivity {
                             users.add(name);
                         }
                         if (users.contains(username)) {
-                            Intent intent = new Intent(WordClashLogin.this, GamePlayActivity.class);
+                            Log.d("********* Users from Login Activity:", users.toString());
+                            Intent intent = new Intent(WordClashLogin.this, WordClash.class);
+                            intent.putExtra("UserList", users);
+                            intent.putExtra("Username", username);
                             startActivity(intent);
                         } else {
                             Toast.makeText(WordClashLogin.this, "Username Not Found",

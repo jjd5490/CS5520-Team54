@@ -38,7 +38,7 @@ public class WordClashSignup extends AppCompatActivity {
 
     public void signUp(View view) {
         username = un.getText().toString();
-        List<String> users = new ArrayList<>();
+        ArrayList<String> users = new ArrayList<>();
 
         db.getReference().child("WCUserList").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -53,7 +53,9 @@ public class WordClashSignup extends AppCompatActivity {
                         }
                         if (!users.contains(username)) {
                             db.getReference().child("WCUserList").child(String.valueOf(num)).setValue(username);
-                            Intent intent = new Intent(WordClashSignup.this, GamePlayActivity.class);
+                            Intent intent = new Intent(WordClashSignup.this, WordClash.class);
+                            intent.putExtra("UserList", users);
+                            intent.putExtra("Username", username);
                             startActivity(intent);
                         } else {
                             Toast.makeText(WordClashSignup.this, "User Already Exists",
