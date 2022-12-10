@@ -32,7 +32,8 @@ public class WCGameModelAdapter extends RecyclerView.Adapter<WCGameModelViewHold
     @NonNull
     @Override
     public WCGameModelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new WCGameModelViewHolder(LayoutInflater.from(context).inflate(R.layout.select_game_layout, null));
+        //return new WCGameModelViewHolder(LayoutInflater.from(context).inflate(R.layout.select_game_layout, null));
+        return new WCGameModelViewHolder(LayoutInflater.from(context).inflate(R.layout.test_layout, parent, false));
     }
 
     @Override

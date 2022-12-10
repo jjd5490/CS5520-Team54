@@ -26,8 +26,10 @@ public class WCGameModelViewHolder extends RecyclerView.ViewHolder {
 
     public WCGameModelViewHolder(@NonNull View itemView) {
         super(itemView);
-        this.user = itemView.findViewById(R.id.opponent_name);
-        this.key = itemView.findViewById(R.id.key_view);
+        //this.user = itemView.findViewById(R.id.opponent_name);
+        //this.key = itemView.findViewById(R.id.key_view);
+        this.user = itemView.findViewById(R.id.opponent_name_test);
+        this.key = itemView.findViewById(R.id.room_test);
         this.gameKey = "";
         this.username = "";
         this.db = null;

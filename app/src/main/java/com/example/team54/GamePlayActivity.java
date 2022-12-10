@@ -46,6 +46,7 @@ public class GamePlayActivity extends AppCompatActivity {
     FirebaseDatabase db;
     String word;
     Boolean ready;
+    boolean op_ready;
     String role;
     String op_role;
 
@@ -134,14 +135,15 @@ public class GamePlayActivity extends AppCompatActivity {
         db.getReference("Games/" + gameKey).child(op_role + "_ready").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean op_ready = snapshot.getValue(boolean.class);
+                op_ready = snapshot.getValue(boolean.class);
                 if (op_ready && ready) {
                     Toast.makeText(GamePlayActivity.this, "Everyone is ready!",
                             Toast.LENGTH_LONG).show();
                     db.getReference("Games/" + gameKey).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
-
+                            gameData = task.getResult().getValue(WCGameModel.class);
+                            renderOpponentData();
                         }
                     });
                 }
@@ -194,7 +196,14 @@ public class GamePlayActivity extends AppCompatActivity {
 
                 @Override
                 public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-
+                    if (op_ready) {
+                        gameData = currentData.getValue(WCGameModel.class);
+                        renderOpponentData();
+                    } else {
+                        // add loading animation here
+                        Toast.makeText(GamePlayActivity.this, "Waiting for opponent",
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         }
@@ -292,6 +301,34 @@ public class GamePlayActivity extends AppCompatActivity {
         LetterBank9.setImageResource(consList.get(4));
         LetterBank10.setImageResource(consList.get(5));
         LetterBank11.setImageResource(consList.get(6));
+    }
+
+    public void renderOpponentData() {
+        List<Integer> op_vowels;
+        List<Integer> op_consonants;
+        if (role.equals("host")) {
+            op_vowels = gameData.getGuest_data().vowel_positions;
+            op_consonants = gameData.getGuest_data().consonant_positions;
+        } else {
+            op_vowels = gameData.getHost_data().vowel_positions;
+            op_consonants = gameData.getHost_data().consonant_positions;
+        }
+        getOpponentVowels(op_vowels);
+        getOpponentConsonants(op_consonants);
+        wordBuildLayout.removeAllViews();
+        drawLetterBank();
+    }
+
+    public void getOpponentVowels(List<Integer> vowels) {
+        for (int i = 0; i <vowels.size(); i++) {
+            vowel_positions[i] = vowels.get(i);
+        }
+    }
+
+    public void getOpponentConsonants(List<Integer> consonants) {
+        for (int i = 0; i < consonants.size(); i++) {
+            consonant_positions[i] = consonants.get(i);
+        }
     }
 
     public void initializeLookups() {

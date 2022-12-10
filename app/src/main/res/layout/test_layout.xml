@@ -4,38 +4,39 @@
     android:foreground="?selectableItemBackground"
     android:clickable="true"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:id="@+id/test_card_view"
     android:layout_margin="5dp"
-    app:cardBackgroundColor="#FAF9F6"
+    app:cardBackgroundColor="#89CFF0"
     app:cardCornerRadius="6dp"
     app:cardElevation="3dp"
-    app:contentPadding="4dp">
+    app:contentPadding="4dp"
+    android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-
-        android:id="@+id/gs_constraint"
+        android:id="@+id/gs_constraint_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/opponent_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="28sp"
-            android:textStyle="bold"
+            android:id="@+id/opponent_name_test"
+            android:layout_width="wrap_content"
+            android:layout_height="39dp"
+            android:layout_marginStart="16dp"
+            android:textSize="30sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/key_view"
-            android:layout_width="match_parent"
+            android:id="@+id/room_test"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/opponent_name"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/opponent_name_test" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
