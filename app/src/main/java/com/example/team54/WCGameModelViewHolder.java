@@ -41,12 +41,13 @@ public class WCGameModelViewHolder extends RecyclerView.ViewHolder {
                     @Override
                     public Transaction.Result doTransaction(@NonNull MutableData currentData) {
                         WCGameModel game = currentData.getValue(WCGameModel.class);
-                        if (game == null) {
-                            Log.d("*************", gameKey);
+                        if (game != null) {
+                            game.setGuest(key.getText().toString());
+                            currentData.setValue(game);
+                            return Transaction.success(currentData);
+                        } else {
+                            return Transaction.abort();
                         }
-                        game.setGuest(key.getText().toString());
-                        currentData.setValue(game);
-                        return Transaction.success(currentData);
                     }
 
                     @Override

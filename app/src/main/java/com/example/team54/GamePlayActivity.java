@@ -12,8 +12,10 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +51,12 @@ public class GamePlayActivity extends AppCompatActivity {
     boolean op_ready;
     String role;
     String op_role;
+    TextView wait_label;
+    TextView letterBankLabel;
+    TextView user_label;
+    int balance = 0;
+
+    Button submit;
 
     ImageView LetterBank1;
     ImageView LetterBank2;
@@ -67,6 +75,8 @@ public class GamePlayActivity extends AppCompatActivity {
     Vibrator vibe;
     VibrationEffect vibrationEffect;
 
+    ProgressBar loadingAnimation;
+
     int cursor = 0;
     LinearLayout wordBuildLayout;
 
@@ -83,7 +93,7 @@ public class GamePlayActivity extends AppCompatActivity {
             op_role = "host";
         }
         db = FirebaseDatabase.getInstance();
-        ready = true;
+        ready = false;
 
         // Randomly generate 4 vowels and 7 consonants for the "letter bank"
         generateRandomLetters();
@@ -117,6 +127,26 @@ public class GamePlayActivity extends AppCompatActivity {
         imageViews.add(LetterBank10);
         imageViews.add(LetterBank11);
 
+        loadingAnimation = findViewById(R.id.progressBar);
+        wait_label = findViewById(R.id.waiting_label);
+        wait_label.setVisibility(View.INVISIBLE);
+        loadingAnimation.setVisibility(View.INVISIBLE);
+        letterBankLabel = findViewById(R.id.letter_bank_label);
+        submit = findViewById(R.id.button3);
+        user_label = findViewById(R.id.user_label);
+        user_label.setText(username + ": " + balance);
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ready && op_ready) {
+
+                } else {
+                    submitWord(view);
+                }
+             }
+        });
+
         // Set ImageView resources for letter bank
         drawLetterBank();
 
@@ -137,6 +167,8 @@ public class GamePlayActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 op_ready = snapshot.getValue(boolean.class);
                 if (op_ready && ready) {
+                    wait_label.setVisibility(View.INVISIBLE);
+                    loadingAnimation.setVisibility(View.INVISIBLE);
                     Toast.makeText(GamePlayActivity.this, "Everyone is ready!",
                             Toast.LENGTH_LONG).show();
                     db.getReference("Games/" + gameKey).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -182,6 +214,7 @@ public class GamePlayActivity extends AppCompatActivity {
                         data.setConsonant_positions(consonants);
                         g.setHost_data(data);
                         g.setHost_ready(ready);
+                        op_ready = g.getGuest_ready();
                     } else {
                         data = g.getGuest_data();
                         data.setWord(word);
@@ -189,6 +222,7 @@ public class GamePlayActivity extends AppCompatActivity {
                         data.setConsonant_positions(consonants);
                         g.setGuest_data(data);
                         g.setGuest_ready(ready);
+                        op_ready = g.getHost_ready();
                     }
                     currentData.setValue(g);
                     return Transaction.success(currentData);
@@ -197,12 +231,16 @@ public class GamePlayActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
                     if (op_ready) {
+                        wait_label.setVisibility(View.INVISIBLE);
+                        loadingAnimation.setVisibility(View.INVISIBLE);
+                        Toast.makeText(GamePlayActivity.this, "Everyone is ready", Toast.LENGTH_LONG).show();
                         gameData = currentData.getValue(WCGameModel.class);
                         renderOpponentData();
                     } else {
-                        // add loading animation here
-                        Toast.makeText(GamePlayActivity.this, "Waiting for opponent",
-                                Toast.LENGTH_LONG).show();
+                        if (ready) {
+                            wait_label.setVisibility(View.VISIBLE);
+                            loadingAnimation.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
             });
@@ -265,11 +303,11 @@ public class GamePlayActivity extends AppCompatActivity {
 
     public void generateRandomLetters() {
         for (int i = 0; i < 4; i++) {
-            int randV = (int)(Math.random() * 6);
+            int randV = (int)(Math.random() * 28);
             vowel_positions[i] = randV;
         }
         for (int j = 0; j < 7; j++) {
-            int randC = (int)(Math.random() * 20);
+            int randC = (int)(Math.random() * 53);
             consonant_positions[j] = randC;
             System.out.println(randC);
         }
@@ -301,6 +339,11 @@ public class GamePlayActivity extends AppCompatActivity {
         LetterBank9.setImageResource(consList.get(4));
         LetterBank10.setImageResource(consList.get(5));
         LetterBank11.setImageResource(consList.get(6));
+
+        for (ImageView l : imageViews) {
+            l.setClickable(true);
+            l.setVisibility(View.VISIBLE);
+        }
     }
 
     public void renderOpponentData() {
@@ -316,6 +359,7 @@ public class GamePlayActivity extends AppCompatActivity {
         getOpponentVowels(op_vowels);
         getOpponentConsonants(op_consonants);
         wordBuildLayout.removeAllViews();
+        letterBankLabel.setText("Opponent's Letters");
         drawLetterBank();
     }
 
@@ -332,13 +376,74 @@ public class GamePlayActivity extends AppCompatActivity {
     }
 
     public void initializeLookups() {
-        vowelLookup.put(0, "A");
-        vowelLookup.put(1, "E");
-        vowelLookup.put(2, "I");
-        vowelLookup.put(3, "O");
-        vowelLookup.put(4, "U");
-        vowelLookup.put(5, "Y");
 
+        for (int i = 0; i < 28; i++) {
+            if (i < 5) {
+                vowelLookup.put(i, "A");
+            } else if (i < 13) {
+                vowelLookup.put(i, "E");
+            } else if (i < 18) {
+                vowelLookup.put(i, "I");
+            } else if (i < 23) {
+                vowelLookup.put(i, "O");
+            } else if (i < 26) {
+                vowelLookup.put(i, "U");
+            } else {
+                vowelLookup.put(i, "Y");
+            }
+        }
+
+        //vowelLookup.put(0, "A");
+        //vowelLookup.put(1, "E");
+        //vowelLookup.put(2, "I");
+        //vowelLookup.put(3, "O");
+        //vowelLookup.put(4, "U");
+        //vowelLookup.put(5, "Y");
+
+        for (int j = 0; j < 53; j++) {
+            if (j < 2) {
+                consonantLookup.put(j, "B");
+            } else if (j < 5) {
+                consonantLookup.put(j, "C");
+            } else if (j < 9) {
+                consonantLookup.put(j, "D");
+            } else if (j < 12) {
+                consonantLookup.put(j, "F");
+            } else if (j < 14) {
+                consonantLookup.put(j, "G");
+            } else if (j < 18) {
+                consonantLookup.put(j, "H");
+            } else if (j < 19) {
+                consonantLookup.put(j, "J");
+            } else if (j < 20) {
+                consonantLookup.put(j, "K");
+            } else if (j < 24) {
+                consonantLookup.put(j, "L");
+            } else if (j < 27) {
+                consonantLookup.put(j, "M");
+            } else if (j < 32) {
+                consonantLookup.put(j, "N");
+            } else if (j < 34) {
+                consonantLookup.put(j, "P");
+            } else if (j < 35) {
+                consonantLookup.put(j, "Q");
+            } else if (j < 39) {
+                consonantLookup.put(j, "R");
+            } else if (j < 43) {
+                consonantLookup.put(j, "S");
+            } else if (j < 48) {
+                consonantLookup.put(j, "T");
+            } else if (j < 49) {
+                consonantLookup.put(j, "V");
+            } else if (j < 51) {
+                consonantLookup.put(j, "W");
+            } else if (j < 52) {
+                consonantLookup.put(j, "X");
+            } else {
+                consonantLookup.put(j, "Z");
+            }
+        }
+        /*
         consonantLookup.put(0, "B");
         consonantLookup.put(1, "C");
         consonantLookup.put(2, "D");
@@ -359,6 +464,8 @@ public class GamePlayActivity extends AppCompatActivity {
         consonantLookup.put(17, "W");
         consonantLookup.put(18, "X");
         consonantLookup.put(19, "Z");
+
+         */
 
         imageLookup.put("A", R.drawable.a);
         imageLookup.put("B", R.drawable.b);
