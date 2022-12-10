@@ -1,5 +1,7 @@
 package com.example.team54;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -7,6 +9,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,6 +17,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
@@ -28,6 +40,14 @@ public class GamePlayActivity extends AppCompatActivity {
     HashMap<Integer, String> vowelLookup = new HashMap<>();
     HashMap<Integer, String> consonantLookup = new HashMap<>();
     HashMap<String, Integer> imageLookup = new HashMap<>();
+    String username;
+    String gameKey;
+    WCGameModel gameData;
+    FirebaseDatabase db;
+    String word;
+    Boolean ready;
+    String role;
+    String op_role;
 
     ImageView LetterBank1;
     ImageView LetterBank2;
@@ -53,6 +73,16 @@ public class GamePlayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_play);
+        username = getIntent().getStringExtra("Username");
+        gameKey = getIntent().getStringExtra("GameKey");
+        role = getIntent().getStringExtra("Role");
+        if (role.equals("host")) {
+            op_role = "guest";
+        } else {
+            op_role = "host";
+        }
+        db = FirebaseDatabase.getInstance();
+        ready = true;
 
         // Randomly generate 4 vowels and 7 consonants for the "letter bank"
         generateRandomLetters();
@@ -101,6 +131,73 @@ public class GamePlayActivity extends AppCompatActivity {
             setLetterClickListeners(v);
         }
 
+        db.getReference("Games/" + gameKey).child(op_role + "_ready").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean op_ready = snapshot.getValue(boolean.class);
+                if (op_ready && ready) {
+                    Toast.makeText(GamePlayActivity.this, "Everyone is ready!",
+                            Toast.LENGTH_LONG).show();
+                    db.getReference("Games/" + gameKey).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    public void submitWord(View view) {
+        word = getString(view);
+        List<Integer> vowels = new ArrayList<>();
+        List<Integer> consonants = new ArrayList<>();
+        for (int i : vowel_positions) {
+            vowels.add(i);
+        }
+        for (int j : consonant_positions) {
+            consonants.add(j);
+        }
+        if (!word.equals("")) {
+            ready = true;
+            db.getReference("Games/" + gameKey).runTransaction(new Transaction.Handler() {
+                @NonNull
+                @Override
+                public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                    WCGameModel g = currentData.getValue(WCGameModel.class);
+                    UserDataModel data;
+                    if (role.equals("host")) {
+                        data = g.getHost_data();
+                        data.setWord(word);
+                        data.setVowel_positions(vowels);
+                        data.setConsonant_positions(consonants);
+                        g.setHost_data(data);
+                        g.setHost_ready(ready);
+                    } else {
+                        data = g.getGuest_data();
+                        data.setWord(word);
+                        data.setVowel_positions(vowels);
+                        data.setConsonant_positions(consonants);
+                        g.setGuest_data(data);
+                        g.setGuest_ready(ready);
+                    }
+                    currentData.setValue(g);
+                    return Transaction.success(currentData);
+                }
+
+                @Override
+                public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+
+                }
+            });
+        }
     }
 
     public void setLetterClickListeners(ImageView v) {

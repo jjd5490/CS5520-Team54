@@ -38,6 +38,7 @@ public class WCGameModelAdapter extends RecyclerView.Adapter<WCGameModelViewHold
     @Override
     public void onBindViewHolder(@NonNull WCGameModelViewHolder holder, int position) {
         holder.user.setText(gameList.get(position).getHost());
+        holder.key.setText(username);
         holder.setGameKey(gameRefs.get(position));
         holder.setDb(db);
         holder.setUsername(username);

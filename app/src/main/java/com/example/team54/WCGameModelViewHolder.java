@@ -1,6 +1,7 @@
 package com.example.team54;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import com.google.firebase.database.Transaction;
 public class WCGameModelViewHolder extends RecyclerView.ViewHolder {
 
     public TextView user;
+    public TextView key;
     public String gameKey;
     public FirebaseDatabase db;
     public String username;
@@ -25,19 +27,22 @@ public class WCGameModelViewHolder extends RecyclerView.ViewHolder {
     public WCGameModelViewHolder(@NonNull View itemView) {
         super(itemView);
         this.user = itemView.findViewById(R.id.opponent_name);
+        this.key = itemView.findViewById(R.id.key_view);
         this.gameKey = "";
         this.username = "";
         this.db = null;
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "Game Key = " + gameKey, Toast.LENGTH_LONG).show();
                 db.getReference("Games").child(gameKey).runTransaction(new Transaction.Handler() {
                     @NonNull
                     @Override
                     public Transaction.Result doTransaction(@NonNull MutableData currentData) {
                         WCGameModel game = currentData.getValue(WCGameModel.class);
-                        game.setGuest(username);
+                        if (game == null) {
+                            Log.d("*************", gameKey);
+                        }
+                        game.setGuest(key.getText().toString());
                         currentData.setValue(game);
                         return Transaction.success(currentData);
                     }
@@ -48,6 +53,7 @@ public class WCGameModelViewHolder extends RecyclerView.ViewHolder {
                             Intent intent = new Intent(itemView.getContext(), GamePlayActivity.class);
                             intent.putExtra("Username", username);
                             intent.putExtra("GameKey", gameKey);
+                            intent.putExtra("Role", "guest");
                             itemView.getContext().startActivity(intent);
                         }
                     }
