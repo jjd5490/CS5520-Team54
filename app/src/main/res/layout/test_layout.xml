@@ -19,13 +19,24 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/opponent_name_test"
+            android:id="@+id/host_label"
             android:layout_width="wrap_content"
-            android:layout_height="39dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="match_parent"
+            android:text="Host Player: "
             android:textSize="30sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/opponent_name_test"
+            android:layout_width="wrap_content"
+            android:layout_height="39dp"
+            android:layout_marginStart="4dp"
+            android:textSize="30sp"
+            app:layout_constraintStart_toEndOf="@+id/host_label"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -34,9 +45,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:visibility="invisible"
+            android:textSize="1sp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/opponent_name_test" />
+            app:layout_constraintStart_toEndOf="@id/opponent_name_test"
+            app:layout_constraintTop_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
