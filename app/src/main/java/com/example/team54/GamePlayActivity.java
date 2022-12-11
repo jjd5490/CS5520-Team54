@@ -1,25 +1,20 @@
 package com.example.team54;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,9 +25,8 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -52,13 +46,20 @@ public class GamePlayActivity extends AppCompatActivity {
     boolean op_ready;
     String role;
     String op_role;
+    String opponent_word;
     TextView wait_label;
     TextView letterBankLabel;
     TextView user_label;
-    int balance = 0;
+    int balance = 500;
     ImageView winGraphic;
 
     Button submit;
+    Button buyFirstLetterB;
+    Button buyLastLetterB;
+    Button buyWordLengthB;
+    Button buyVowelCountB;
+    Button buyConsCountB;
+    List<Button> hintButtonList;
 
     ImageView LetterBank1;
     ImageView LetterBank2;
@@ -79,7 +80,6 @@ public class GamePlayActivity extends AppCompatActivity {
 
     ProgressBar loadingAnimation;
 
-    int cursor = 0;
     LinearLayout wordBuildLayout;
 
     @Override
@@ -140,6 +140,21 @@ public class GamePlayActivity extends AppCompatActivity {
         winGraphic = findViewById(R.id.win_graphic);
         winGraphic.setVisibility(View.INVISIBLE);
 
+        buyFirstLetterB = findViewById(R.id.first_letter_button);
+        buyLastLetterB = findViewById(R.id.last_letter_button);
+        buyWordLengthB = findViewById(R.id.word_length_button);
+        buyVowelCountB = findViewById(R.id.vowel_count_button);
+        buyConsCountB = findViewById(R.id.cons_count_button);
+        hintButtonList = new ArrayList<>();
+        hintButtonList.add(buyFirstLetterB);
+        hintButtonList.add(buyLastLetterB);
+        hintButtonList.add(buyWordLengthB);
+        hintButtonList.add(buyVowelCountB);
+        hintButtonList.add(buyConsCountB);
+        toggleButtonVisibility(hintButtonList, false, View.INVISIBLE);
+
+
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -171,6 +186,7 @@ public class GamePlayActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 op_ready = snapshot.getValue(boolean.class);
                 if (op_ready && ready) {
+                    toggleButtonVisibility(hintButtonList, true, View.VISIBLE);
                     submit.setText("Guess");
                     wait_label.setVisibility(View.INVISIBLE);
                     loadingAnimation.setVisibility(View.INVISIBLE);
@@ -180,6 +196,11 @@ public class GamePlayActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
                             gameData = task.getResult().getValue(WCGameModel.class);
+                            if (role.equals("host")) {
+                                opponent_word = gameData.getGuest_data().getWord();
+                            } else {
+                                opponent_word = gameData.getHost_data().getWord();
+                            }
                             renderOpponentData();
                         }
                     });
@@ -280,10 +301,16 @@ public class GamePlayActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
                     if (op_ready) {
+                        toggleButtonVisibility(hintButtonList, true, View.VISIBLE);
                         wait_label.setVisibility(View.INVISIBLE);
                         loadingAnimation.setVisibility(View.INVISIBLE);
                         Toast.makeText(GamePlayActivity.this, "Everyone is ready", Toast.LENGTH_LONG).show();
                         gameData = currentData.getValue(WCGameModel.class);
+                        if (role.equals("host")) {
+                            opponent_word = gameData.getGuest_data().getWord();
+                        } else {
+                            opponent_word = gameData.getHost_data().getWord();
+                        }
                         renderOpponentData();
                     } else {
                         if (ready) {
@@ -442,13 +469,6 @@ public class GamePlayActivity extends AppCompatActivity {
             }
         }
 
-        //vowelLookup.put(0, "A");
-        //vowelLookup.put(1, "E");
-        //vowelLookup.put(2, "I");
-        //vowelLookup.put(3, "O");
-        //vowelLookup.put(4, "U");
-        //vowelLookup.put(5, "Y");
-
         for (int j = 0; j < 53; j++) {
             if (j < 2) {
                 consonantLookup.put(j, "B");
@@ -492,29 +512,6 @@ public class GamePlayActivity extends AppCompatActivity {
                 consonantLookup.put(j, "Z");
             }
         }
-        /*
-        consonantLookup.put(0, "B");
-        consonantLookup.put(1, "C");
-        consonantLookup.put(2, "D");
-        consonantLookup.put(3, "F");
-        consonantLookup.put(4, "G");
-        consonantLookup.put(5, "H");
-        consonantLookup.put(6, "J");
-        consonantLookup.put(7, "K");
-        consonantLookup.put(8, "L");
-        consonantLookup.put(9, "M");
-        consonantLookup.put(10, "N");
-        consonantLookup.put(11, "P");
-        consonantLookup.put(12, "Q");
-        consonantLookup.put(13, "R");
-        consonantLookup.put(14, "S");
-        consonantLookup.put(15, "T");
-        consonantLookup.put(16, "V");
-        consonantLookup.put(17, "W");
-        consonantLookup.put(18, "X");
-        consonantLookup.put(19, "Z");
-
-         */
 
         imageLookup.put("A", R.drawable.a);
         imageLookup.put("B", R.drawable.b);
@@ -542,5 +539,110 @@ public class GamePlayActivity extends AppCompatActivity {
         imageLookup.put("X", R.drawable.x);
         imageLookup.put("Y", R.drawable.y);
         imageLookup.put("Z", R.drawable.z);
+    }
+
+    public void buyVowelCount(View view) {
+        int cost = 200;
+        int newBalance = balance - cost;
+        int count = 0;
+        Collection<String> vowels = vowelLookup.values();
+        for (int i = 0; i < opponent_word.length(); i++) {
+            if (vowels.contains(String.valueOf(opponent_word.charAt(i)))) {
+                count++;
+            }
+        }
+        String msg ="There are " + count + " vowels";
+        if (newBalance >= 0) {
+            balance = newBalance;
+            updateBalance();
+            buyVowelCountB.setClickable(false);
+            buyVowelCountB.setVisibility(View.INVISIBLE);
+            Toast.makeText(GamePlayActivity.this, msg, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(GamePlayActivity.this, "You don't have enough coins",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void buyConsonantCount(View view) {
+        int cost = 200;
+        int newBalance = balance - cost;
+        int count = 0;
+        Collection<String> cons = consonantLookup.values();
+        for (int i = 0; i < opponent_word.length(); i++) {
+            if (cons.contains(String.valueOf(opponent_word.charAt(i)))) {
+                count++;
+            }
+        }
+        String msg ="There are " + count + " consonants";
+        if (newBalance >= 0) {
+            balance = newBalance;
+            updateBalance();
+            buyConsCountB.setClickable(false);
+            buyConsCountB.setVisibility(View.INVISIBLE);
+            Toast.makeText(GamePlayActivity.this, msg, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(GamePlayActivity.this, "You don't have enough coins",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void buyWordLength(View view) {
+        int cost = 200;
+        int newBalance = balance - cost;
+        String msg = "Word length = " + String.valueOf(opponent_word.length());
+        if (newBalance >= 0) {
+            balance = newBalance;
+            updateBalance();
+            buyWordLengthB.setClickable(false);
+            buyWordLengthB.setVisibility(View.INVISIBLE);
+            Toast.makeText(GamePlayActivity.this, msg, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(GamePlayActivity.this, "You don't have enough coins",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void buyFirstLetter(View view) {
+        int cost = 400;
+        int newBalance = balance - cost;
+        String msg = "First letter = " + opponent_word.substring(0, 1);
+        if (newBalance >= 0) {
+            balance = newBalance;
+            updateBalance();
+            buyFirstLetterB.setVisibility(View.INVISIBLE);
+            buyFirstLetterB.setClickable(false);
+            Toast.makeText(GamePlayActivity.this, msg, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(GamePlayActivity.this, "You don't have enough coins",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void buyLastLetter(View view) {
+        int cost = 100;
+        int newBalance = balance - cost;
+        String msg = "Last Letter = " + opponent_word.substring(opponent_word.length() - 1);
+        if (newBalance >= 0) {
+            balance = newBalance;
+            updateBalance();
+            buyLastLetterB.setVisibility(View.INVISIBLE);
+            buyLastLetterB.setClickable(false);
+            Toast.makeText(GamePlayActivity.this, msg, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(GamePlayActivity.this, "You don't have enough coins",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void toggleButtonVisibility(List<Button> buttons, boolean b, int vis) {
+        for (Button button : buttons) {
+            button.setClickable(b);
+            button.setVisibility(vis);
+        }
+    }
+
+    public void updateBalance() {
+        user_label.setText(username + ": " + balance);
     }
 }
