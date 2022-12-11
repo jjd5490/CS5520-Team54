@@ -50,7 +50,7 @@ public class GamePlayActivity extends AppCompatActivity {
     TextView wait_label;
     TextView letterBankLabel;
     TextView user_label;
-    int balance = 500;
+    int balance = 400;
     ImageView winGraphic;
 
     Button submit;
@@ -60,6 +60,7 @@ public class GamePlayActivity extends AppCompatActivity {
     Button buyVowelCountB;
     Button buyConsCountB;
     List<Button> hintButtonList;
+    TextView hintLabel;
 
     ImageView LetterBank1;
     ImageView LetterBank2;
@@ -151,6 +152,7 @@ public class GamePlayActivity extends AppCompatActivity {
         hintButtonList.add(buyWordLengthB);
         hintButtonList.add(buyVowelCountB);
         hintButtonList.add(buyConsCountB);
+        hintLabel =findViewById(R.id.hint_label);
         toggleButtonVisibility(hintButtonList, false, View.INVISIBLE);
         winGraphic.bringToFront();
 
@@ -630,6 +632,7 @@ public class GamePlayActivity extends AppCompatActivity {
     }
 
     public void toggleButtonVisibility(List<Button> buttons, boolean b, int vis) {
+        hintLabel.setVisibility(vis);
         for (Button button : buttons) {
             button.setClickable(b);
             button.setVisibility(vis);
