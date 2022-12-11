@@ -36,14 +36,4 @@ public class WordClash extends AppCompatActivity {
         Intent rules = new Intent(this, RulesActivity.class);
         startActivity(rules);
     }
-
-    public void openScores(View view) {
-        Intent scores = new Intent(this, HighScoresActivity.class);
-        startActivity(scores);
-    }
-
-    public void openSettings(View view) {
-        Intent settings = new Intent(this, SettingsActivity.class);
-        startActivity(settings);
-    }
 }
