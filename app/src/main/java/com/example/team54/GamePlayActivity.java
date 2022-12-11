@@ -152,8 +152,7 @@ public class GamePlayActivity extends AppCompatActivity {
         hintButtonList.add(buyVowelCountB);
         hintButtonList.add(buyConsCountB);
         toggleButtonVisibility(hintButtonList, false, View.INVISIBLE);
-
-
+        winGraphic.bringToFront();
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,14 +245,9 @@ public class GamePlayActivity extends AppCompatActivity {
             op_word = gameData.getHost_data().getWord();
         }
         if (word.equals(op_word)) {
+            toggleButtonVisibility(hintButtonList, false, View.INVISIBLE);
             winGraphic.setVisibility(View.VISIBLE);
             db.getReference("Games/" + gameKey).child(role + "_data").child("won").setValue(true);
-            try {
-                Thread.sleep(3500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            finish();
         } else {
             Toast.makeText(GamePlayActivity.this, "Incorrect. Keep trying", Toast.LENGTH_LONG).show();
         }

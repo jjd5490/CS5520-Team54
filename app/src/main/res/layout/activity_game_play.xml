@@ -174,7 +174,7 @@
         android:id="@+id/string_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="24dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/letter_bank_label"
         app:layout_constraintEnd_toEndOf="parent"
