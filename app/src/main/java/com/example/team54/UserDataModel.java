@@ -10,6 +10,7 @@ public class UserDataModel {
     public String word;
     public List<Integer> vowel_positions;
     public List<Integer> consonant_positions;
+    boolean won;
 
     public UserDataModel() {
 
@@ -19,8 +20,17 @@ public class UserDataModel {
         this.username = username;
         this.balance = 0;
         this.word = "_";
+        this.won = false;
         vowel_positions = new ArrayList<>();
         consonant_positions = new ArrayList<>();
+    }
+
+    public boolean isWon() {
+        return won;
+    }
+
+    public void setWon(boolean won) {
+        this.won = won;
     }
 
     public int getBalance() {

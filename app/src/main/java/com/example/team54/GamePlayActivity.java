@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -55,6 +56,7 @@ public class GamePlayActivity extends AppCompatActivity {
     TextView letterBankLabel;
     TextView user_label;
     int balance = 0;
+    ImageView winGraphic;
 
     Button submit;
 
@@ -135,12 +137,14 @@ public class GamePlayActivity extends AppCompatActivity {
         submit = findViewById(R.id.button3);
         user_label = findViewById(R.id.user_label);
         user_label.setText(username + ": " + balance);
+        winGraphic = findViewById(R.id.win_graphic);
+        winGraphic.setVisibility(View.INVISIBLE);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (ready && op_ready) {
-
+                    guessWord(view);
                 } else {
                     submitWord(view);
                 }
@@ -167,6 +171,7 @@ public class GamePlayActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 op_ready = snapshot.getValue(boolean.class);
                 if (op_ready && ready) {
+                    submit.setText("Guess");
                     wait_label.setVisibility(View.INVISIBLE);
                     loadingAnimation.setVisibility(View.INVISIBLE);
                     Toast.makeText(GamePlayActivity.this, "Everyone is ready!",
@@ -180,6 +185,28 @@ public class GamePlayActivity extends AppCompatActivity {
                     });
                 }
             }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        db.getReference("Games/" + gameKey).child(op_role + "_data").child("won").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean w = snapshot.getValue(boolean.class);
+                System.out.println("Op role = " + op_role);
+                System.out.println("Opponent win" + w);
+                if (w) {
+                    Toast.makeText(GamePlayActivity.this, "Sorry, you lost.", Toast.LENGTH_LONG).show();
+                    try {
+                        Thread.sleep(3500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    finish();
+                }
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -187,6 +214,28 @@ public class GamePlayActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void guessWord(View view) {
+        word = getString(view);
+        String op_word;
+        if (role.equals("host")) {
+            op_word = gameData.getGuest_data().getWord();
+        } else {
+            op_word = gameData.getHost_data().getWord();
+        }
+        if (word.equals(op_word)) {
+            winGraphic.setVisibility(View.VISIBLE);
+            db.getReference("Games/" + gameKey).child(role + "_data").child("won").setValue(true);
+            try {
+                Thread.sleep(3500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            finish();
+        } else {
+            Toast.makeText(GamePlayActivity.this, "Incorrect. Keep trying", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void submitWord(View view) {
